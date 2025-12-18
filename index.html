@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Parkir Operasi Lilin Progo 2025 - Yogyakarta</title>
+    
+    <!-- iOS Meta Tags -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-title" content="Parkir Jogja">
+    
+    <style>
+        /* ====== RESET & BASE ====== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        html {
+            height: 100%;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        body { 
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            padding: 15px;
+            overflow-x: hidden;
+            position: relative;
+            color: #333;
+        }
+        
+        /* ====== CONTAINER ====== */
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        
+        /* ====== HEADER UTAMA ====== */
+        .main-header { 
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%); 
+            color: white; 
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .main-header h1 { 
+            font-size: 22px; 
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .main-header p { 
+            opacity: 0.9; 
+            font-size: 14px;
+            font-weight: 300;
+        }
+        
+        /* ====== MOBILE COMPACT HEADER ====== */
+        /* Tampilan Mobile - Lebih Compact */
+        .compact-header {
+            background: white;
+            padding: 20px 15px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+        
+        /* Jumlah Lokasi Parkir (Satu Baris) */
+        .total-locations {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .total-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .total-number {
+            font-size: 42px;
+            font-weight: 800;
+            color: #3b82f6;
+            line-height: 1;
+            margin-bottom: 5px;
+            font-family: 'Arial Black', sans-serif;
+        }
+        
+        .total-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Tiga Tab Kapasitas (Horizontal di Mobile) */
+        .capacity-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .capacity-tab {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 18px 10px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+        
+        .capacity-tab:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+        
+        .tab-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .tab-number {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+        
+        .tab-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Warna untuk setiap tab */
+        .tab-bus .tab-icon { color: #ef4444; }
+        .tab-bus .tab-number { color: #ef4444; }
+        .tab-bus { border-top: 4px solid #ef4444; }
+        
+        .tab-mobil .tab-icon { color: #3b82f6; }
+        .tab-mobil .tab-number { color: #3b82f6; }
+        .tab-mobil { border-top: 4px solid #3b82f6; }
+        
+        .tab-motor .tab-icon { color: #10b981; }
+        .tab-motor .tab-number { color: #10b981; }
+        .tab-motor { border-top: 4px solid #10b981; }
+        
+        /* ====== DESKTOP HEADER (Akan ditampilkan di desktop saja) ====== */
+        .desktop-stats {
+            display: none;
+            background: #f8fafc;
+            padding: 25px 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .desktop-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .desktop-stat {
+            background: white;
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border: 1px solid #f1f5f9;
+        }
+        
+        .desktop-stat-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .desktop-stat-number { 
+            font-size: 36px; 
+            font-weight: 700; 
+            color: #1e293b; 
+            margin-bottom: 5px;
+        }
+        
+        .desktop-stat-label { 
+            font-size: 14px; 
+            color: #64748b; 
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* ====== ACTIONS SECTION ====== */
+        .actions-section {
+            padding: 0 15px 25px;
+        }
+        
+        .action-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .btn-primary { 
+            width: 100%;
+            padding: 18px 20px; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 12px; 
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:active { 
+            transform: scale(0.98); 
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        /* ====== MAIN CONTENT ====== */
+        .main-content {
+            padding: 0 15px 25px;
+            background: #f8fafc;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 20px 0;
+            padding: 20px 0 15px;
+            border-bottom: 2px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            border-radius: 2px;
+        }
+        
+        /* ====== LOKASI LIST ====== */
+        .lokasi-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .lokasi-item { 
+            background: white; 
+            border-radius: 16px; 
+            padding: 20px; 
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .lokasi-item:active { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .lokasi-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 12px; 
+        }
+        
+        .lokasi-nama { 
+            font-size: 17px; 
+            font-weight: 700; 
+            color: #1e293b; 
+        }
+        
+        .lokasi-id { 
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+            color: white; 
+            width: 32px; 
+            height: 32px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .lokasi-alamat { 
+            color: #64748b; 
+            margin-bottom: 12px; 
+            font-size: 14px;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        
+        .lokasi-alamat::before {
+            content: '📍';
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        /* INFORMASI JARAK BARU */
+        .lokasi-jarak {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #3b82f6;
+            font-weight: 600;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-radius: 10px;
+            border: 1px solid #bfdbfe;
+        }
+        
+        .lokasi-jarak::before {
+            content: '📏';
+            font-size: 14px;
+        }
+        
+        .lokasi-jarak-loading {
+            color: #64748b;
+            background: #f8fafc;
+        }
+        
+        .kapasitas { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+            margin-bottom: 18px; 
+        }
+        
+        .kap-badge { 
+            padding: 8px 14px; 
+            border-radius: 20px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .badge-bus { 
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+        
+        .badge-mobil { 
+            background: linear-gradient(135deg, #bfdbfe, #93c5fd);
+            color: #1d4ed8;
+            border: 1px solid #93c5fd;
+        }
+        
+        .badge-motor { 
+            background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+            color: #047857;
+            border: 1px solid #6ee7b7;
+        }
+        
+        .lokasi-actions { 
+            display: flex; 
+            gap: 10px; 
+        }
+        
+        .btn-action { 
+            flex: 1; 
+            padding: 12px 15px; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 14px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            font-weight: 600;
+            min-height: 44px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-action:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-map { 
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white; 
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-route { 
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white; 
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+        
+        /* ====== LOADING ====== */
+        .loading { 
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .spinner { 
+            border: 4px solid #f3f3f3; 
+            border-top: 4px solid #3b82f6; 
+            border-radius: 50%; 
+            width: 50px; 
+            height: 50px; 
+            animation: spin 1s linear infinite; 
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        /* ====== FOOTER ====== */
+        .footer { 
+            text-align: center; 
+            padding: 25px 20px; 
+            color: #64748b; 
+            font-size: 13px; 
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            line-height: 1.6;
+        }
+        
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+            letter-spacing: 1px;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+        }
+        
+        .footer-copyright {
+            margin-top: 15px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        /* ====== RESPONSIVE DESIGN ====== */
+        
+        /* Desktop (≥ 768px) - Tampilkan desktop version */
+        @media (min-width: 768px) {
+            body {
+                padding: 25px;
+            }
+            
+            .container {
+                border-radius: 24px;
+            }
+            
+            .main-header {
+                padding: 35px 40px;
+            }
+            
+            .main-header h1 { 
+                font-size: 28px; 
+            }
+            
+            .main-header p { 
+                font-size: 16px;
+            }
+            
+            /* Sembunyikan mobile header, tampilkan desktop header */
+            .compact-header {
+                display: none;
+            }
+            
+            .desktop-stats {
+                display: block;
+            }
+            
+            .actions-section {
+                padding: 0 40px 30px;
+            }
+            
+            .main-content {
+                padding: 0 40px 30px;
+            }
+            
+            .section-title {
+                font-size: 22px;
+                padding: 25px 0 20px;
+            }
+            
+            .lokasi-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                gap: 20px;
+            }
+            
+            .lokasi-item {
+                padding: 24px;
+            }
+            
+            .footer {
+                padding: 30px 40px;
+                font-size: 14px;
+            }
+            
+            .footer-logo {
+                font-size: 24px;
+            }
+        }
+        
+        /* Tablet (576px - 768px) */
+        @media (min-width: 576px) and (max-width: 767px) {
+            .compact-header {
+                padding: 20px;
+            }
+            
+            .total-locations {
+                padding: 20px;
+            }
+            
+            .total-number {
+                font-size: 48px;
+            }
+            
+            .total-label {
+                font-size: 15px;
+            }
+            
+            .capacity-tabs {
+                gap: 15px;
+            }
+            
+            .capacity-tab {
+                padding: 20px 15px;
+            }
+            
+            .tab-number {
+                font-size: 32px;
+            }
+            
+            .tab-label {
+                font-size: 13px;
+            }
+            
+            .actions-section,
+            .main-content {
+                padding: 0 20px 25px;
+            }
+        }
+        
+        /* Mobile Small (≤ 375px) */
+        @media (max-width: 375px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 16px;
+            }
+            
+            .main-header {
+                padding: 20px 15px;
+            }
+            
+            .main-header h1 { 
+                font-size: 20px; 
+            }
+            
+            .compact-header {
+                padding: 15px;
+            }
+            
+            .total-number {
+                font-size: 36px;
+            }
+            
+            .capacity-tabs {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .capacity-tab {
+                display: flex;
+                align-items: center;
+                text-align: left;
+                padding: 15px;
+                gap: 15px;
+            }
+            
+            .tab-icon {
+                margin-bottom: 0;
+                font-size: 24px;
+                flex-shrink: 0;
+            }
+            
+            .tab-number {
+                margin-bottom: 0;
+                margin-right: auto;
+                font-size: 24px;
+            }
+            
+            .tab-label {
+                font-size: 11px;
+            }
+            
+            .btn-action {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .kap-badge {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+        
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #0f172a, #1e293b);
+            }
+            
+            .container {
+                background: #1e293b;
+                color: #e2e8f0;
+            }
+            
+            .compact-header {
+                background: #1e293b;
+                border-bottom-color: #334155;
+            }
+            
+            .total-locations {
+                background: #334155;
+                border-color: #475569;
+                color: #e2e8f0;
+            }
+            
+            .total-number {
+                color: #60a5fa;
+            }
+            
+            .total-label {
+                color: #cbd5e1;
+            }
+            
+            .capacity-tab {
+                background: #334155;
+                border-color: #475569;
+                color: #e2e8f0;
+            }
+            
+            .tab-label {
+                color: #cbd5e1;
+            }
+            
+            .main-content {
+                background: #1e293b;
+            }
+            
+            .lokasi-item {
+                background: #334155;
+                border-color: #475569;
+                color: #e2e8f0;
+            }
+            
+            .lokasi-nama {
+                color: #f8fafc;
+            }
+            
+            .lokasi-alamat {
+                color: #cbd5e1;
+            }
+            
+            .lokasi-jarak {
+                background: linear-gradient(135deg, #1e3a8a, #1e40af);
+                color: #93c5fd;
+                border-color: #3b82f6;
+            }
+            
+            .footer {
+                background: linear-gradient(135deg, #0f172a, #1e293b);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER UTAMA -->
+        <div class="main-header">
+            <div class="header-content">
+                <div class="header-icon">🚗</div>
+                <h1>OPERASI LILIN PROGO 2025</h1>
+                <p>Lokasi Parkir - Kota Yogyakarta</p>
+            </div>
+        </div>
+        
+        <!-- DESKTOP STATS HEADER (Hanya tampil di Desktop) -->
+        <div class="desktop-stats">
+            <div class="desktop-stats-grid">
+                <!-- Total Lokasi -->
+                <div class="desktop-stat">
+                    <div class="desktop-stat-icon">📍</div>
+                    <div class="desktop-stat-number">15</div>
+                    <div class="desktop-stat-label">Lokasi Parkir</div>
+                </div>
+                
+                <!-- Bus -->
+                <div class="desktop-stat">
+                    <div class="desktop-stat-icon">🚌</div>
+                    <div class="desktop-stat-number">484</div>
+                    <div class="desktop-stat-label">Kapasitas Bus</div>
+                </div>
+                
+                <!-- Mobil -->
+                <div class="desktop-stat">
+                    <div class="desktop-stat-icon">🚗</div>
+                    <div class="desktop-stat-number">1,610</div>
+                    <div class="desktop-stat-label">Kapasitas Mobil</div>
+                </div>
+                
+                <!-- Motor -->
+                <div class="desktop-stat">
+                    <div class="desktop-stat-icon">🏍️</div>
+                    <div class="desktop-stat-number">1,682</div>
+                    <div class="desktop-stat-label">Kapasitas Motor</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MOBILE COMPACT HEADER (Hanya tampil di Mobile) -->
+        <div class="compact-header">
+            <!-- Jumlah Lokasi Parkir (Satu Baris Besar) -->
+            <div class="total-locations">
+                <div class="total-icon">📍</div>
+                <div class="total-number">15</div>
+                <div class="total-label">LOKASI PARKIR</div>
+            </div>
+            
+            <!-- Tiga Tab Kapasitas (Horizontal di Mobile) -->
+            <div class="capacity-tabs">
+                <!-- Bus -->
+                <div class="capacity-tab tab-bus">
+                    <div class="tab-icon">🚌</div>
+                    <div class="tab-number">484</div>
+                    <div class="tab-label">BUS</div>
+                </div>
+                
+                <!-- Mobil -->
+                <div class="capacity-tab tab-mobil">
+                    <div class="tab-icon">🚗</div>
+                    <div class="tab-number">1,610</div>
+                    <div class="tab-label">MOBIL</div>
+                </div>
+                
+                <!-- Motor -->
+                <div class="capacity-tab tab-motor">
+                    <div class="tab-icon">🏍️</div>
+                    <div class="tab-number">1,682</div>
+                    <div class="tab-label">MOTOR</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ACTIONS SECTION -->
+        <div class="actions-section">
+            <div class="action-wrapper">
+                <button class="btn btn-primary" onclick="cariParkirTerdekat()" id="btnCari">
+                    <span>📍</span> CARI PARKIR TERDEKAT
+                </button>
+            </div>
+        </div>
+        
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="section-title">
+                DAFTAR LOKASI PARKIR
+            </div>
+            
+            <div class="lokasi-list" id="lokasiList">
+                <!-- Data akan dimuat di sini -->
+            </div>
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="footer-logo">Satlantas Polresta Yogyakarta</div>
+            <p>Polri Untuk Masyarakat</p>
+            <p class="footer-copyright">© 2025 - Operasi Lilin Progo</p>
+            <p class="footer-copyright">Scan QR Code untuk informasi parkir</p>
+        </div>
+    </div>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; font-weight: 600; color: #1e293b; font-size: 16px;">Mengarahkan ke Maps...</p>
+        <p style="margin-top: 8px; font-size: 13px; color: #64748b;">Harap tunggu sebentar</p>
+    </div>
+
+    <script>
+        // Data parkir
+        const dataParkir = [
+            {id:1, nama:"SENOPATI", alamat:"JL P. SENOPATI", bus:62, mobil:200, motor:0, koordinat:"-7.8017074,110.3681792"},
+            {id:2, nama:"NGABEAN", alamat:"JL W. HASYIM", bus:60, mobil:80, motor:100, koordinat:"-7.8014685,110.3562862"},
+            {id:3, nama:"SRI WEDANI", alamat:"JL SRI WEDANI", bus:0, mobil:60, motor:250, koordinat:"-7.800385,110.368361"},
+            {id:4, nama:"SPRAGA", alamat:"JL KHA DAHLAN", bus:30, mobil:50, motor:0, koordinat:"-7.8018505,110.3632816"},
+            {id:5, nama:"RAMAI MALL", alamat:"JL BESKALAN", bus:0, mobil:20, motor:382, koordinat:"-7.7973211,110.3641841"},
+            {id:6, nama:"GRAND ZURI", alamat:"JL MARGO UTOMO", bus:100, mobil:50, motor:0, koordinat:"-7.787088,110.366706"},
+            {id:7, nama:"EX MANOA CAFE", alamat:"JL ABU BAKAR ALI", bus:20, mobil:50, motor:0, koordinat:"-7.7897929,110.3706896"},
+            {id:8, nama:"MALIOBORO II", alamat:"JL PABRINGAN", bus:0, mobil:115, motor:250, koordinat:"-7.7992907,110.3663957"},
+            {id:9, nama:"MALIOBORO III", alamat:"JL KETANDAN 7", bus:0, mobil:125, motor:0, koordinat:"-7.7978843,110.3673653"},
+            {id:10, nama:"UTARA CAVINTON", alamat:"JL LETJEND SUPRAPTO", bus:40, mobil:150, motor:0, koordinat:"-7.8002542,110.3560535"},
+            {id:11, nama:"GEMBIRA LOKA", alamat:"JL KEBUN RAYA", bus:82, mobil:100, motor:300, koordinat:"-7.8037595,110.3968204"},
+            {id:12, nama:"KAWULA ALIT", alamat:"JL GANDEKAN", bus:0, mobil:100, motor:200, koordinat:"-7.7920043,110.3611007"},
+            {id:13, nama:"PARKIRAN KOMANDO", alamat:"JL SUDIRMAN", bus:0, mobil:60, motor:200, koordinat:"-7.7832641,110.3683152"},
+            {id:14, nama:"EKS TRIO", alamat:"JL MARGOUTOMO", bus:130, mobil:300, motor:0, koordinat:"-7.7883952,110.36693"},
+            {id:15, nama:"STADION KRIDOSONO", alamat:"JL YOS SUDARSO", bus:0, mobil:0, motor:0, koordinat:"-7.7877683,110.3736898"}
+        ];
+
+        // Global variables
+        let userPosition = null;
+        const distancesCache = new Map();
+
+        // Fungsi untuk menghitung jarak antara dua koordinat (dalam km)
+        function hitungJarak(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius bumi dalam km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Format jarak untuk tampilan
+        function formatJarak(km) {
+            if (km < 1) {
+                return `${Math.round(km * 1000)} meter`;
+            } else {
+                return `${km.toFixed(1)} km`;
+            }
+        }
+
+        // Dapatkan posisi user
+        function getLocation() {
+            return new Promise((resolve, reject) => {
+                if (userPosition) {
+                    resolve(userPosition);
+                    return;
+                }
+
+                if (navigator.geolocation) {
+                    const options = {
+                        enableHighAccuracy: false,
+                        timeout: 5000,
+                        maximumAge: 30000
+                    };
+
+                    const timeoutId = setTimeout(() => {
+                        reject(new Error('Timeout'));
+                    }, 6000);
+
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            clearTimeout(timeoutId);
+                            userPosition = {
+                                lat: pos.coords.latitude,
+                                lng: pos.coords.longitude
+                            };
+                            resolve(userPosition);
+                        },
+                        (err) => {
+                            clearTimeout(timeoutId);
+                            reject(err);
+                        },
+                        options
+                    );
+                } else {
+                    reject(new Error('Geolocation not supported'));
+                }
+            });
+        }
+
+        // Hitung jarak untuk semua lokasi
+        function hitungSemuaJarak() {
+            if (!userPosition) return;
+
+            dataParkir.forEach(lokasi => {
+                const [lokasiLat, lokasiLng] = lokasi.koordinat.split(',').map(Number);
+                const jarak = hitungJarak(
+                    userPosition.lat,
+                    userPosition.lng,
+                    lokasiLat,
+                    lokasiLng
+                );
+                distancesCache.set(lokasi.id, jarak);
+            });
+        }
+
+        // Render lokasi dengan informasi jarak
+        function renderLokasi() {
+            const container = document.getElementById('lokasiList');
+            if (!container) return;
+            
+            let html = '';
+            
+            dataParkir.forEach(lokasi => {
+                const jarak = distancesCache.get(lokasi.id);
+                const jarakText = jarak ? 
+                    `📏 ${formatJarak(jarak)} dari lokasi Anda` : 
+                    '📏 Menghitung jarak...';
+                const jarakClass = jarak ? '' : 'lokasi-jarak-loading';
+                
+                html += `
+                    <div class="lokasi-item">
+                        <div class="lokasi-header">
+                            <div class="lokasi-nama">${lokasi.id}. ${lokasi.nama}</div>
+                            <div class="lokasi-id">${lokasi.id}</div>
+                        </div>
+                        <div class="lokasi-alamat">${lokasi.alamat}</div>
+                        <div class="lokasi-jarak ${jarakClass}">
+                            ${jarakText}
+                        </div>
+                        <div class="kapasitas">
+                            ${lokasi.bus > 0 ? `<span class="kap-badge badge-bus">🚌 ${lokasi.bus} Bus</span>` : ''}
+                            ${lokasi.mobil > 0 ? `<span class="kap-badge badge-mobil">🚗 ${lokasi.mobil} Mobil</span>` : ''}
+                            ${lokasi.motor > 0 ? `<span class="kap-badge badge-motor">🏍️ ${lokasi.motor} Motor</span>` : ''}
+                        </div>
+                        <div class="lokasi-actions">
+                            <button class="btn-action btn-map" onclick="bukaLokasiDiMaps('${lokasi.koordinat}', '${lokasi.nama}')">
+                                <span>🗺️</span> Lihat di Maps
+                            </button>
+                            <button class="btn-action btn-route" onclick="ruteKeLokasi('${lokasi.koordinat}', '${lokasi.nama}')">
+                                <span>📍</span> Rute ke Sini
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Update jarak jika sudah ada data
+            updateJarakDisplay();
+        }
+
+        // Update tampilan jarak
+        function updateJarakDisplay() {
+            const jarakElements = document.querySelectorAll('.lokasi-jarak');
+            jarakElements.forEach((element, index) => {
+                const lokasi = dataParkir[index];
+                const jarak = distancesCache.get(lokasi.id);
+                if (jarak) {
+                    element.textContent = `📏 ${formatJarak(jarak)} dari lokasi Anda`;
+                    element.classList.remove('lokasi-jarak-loading');
+                }
+            });
+        }
+
+        // Fungsi buka Maps
+        function bukaLokasiDiMaps(koordinat, nama) {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
+            if (isIOS) {
+                const appleMapsUrl = `maps://?q=${koordinat}&z=16`;
+                window.location.href = appleMapsUrl;
+                
+                setTimeout(() => {
+                    if (document.hasFocus()) {
+                        window.open(`https://maps.google.com/?q=${koordinat}`, '_blank');
+                    }
+                }, 500);
+            } else {
+                window.open(`https://maps.google.com/?q=${koordinat}`, '_blank');
+            }
+        }
+
+        // Fungsi rute ke lokasi
+        function ruteKeLokasi(koordinat, nama) {
+            const loading = document.getElementById('loading');
+            if (!loading) return;
+            
+            loading.style.display = 'flex';
+            
+            if (navigator.geolocation) {
+                const options = {
+                    enableHighAccuracy: true,
+                    timeout: 7000,
+                    maximumAge: 0
+                };
+                
+                const timeoutId = setTimeout(() => {
+                    loading.style.display = 'none';
+                    bukaLokasiDiMaps(koordinat, nama);
+                }, 5000);
+                
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        clearTimeout(timeoutId);
+                        loading.style.display = 'none';
+                        
+                        const userLat = pos.coords.latitude;
+                        const userLng = pos.coords.longitude;
+                        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                        
+                        if (isIOS) {
+                            const appleRouteUrl = `maps://?saddr=${userLat},${userLng}&daddr=${koordinat}&dirflg=d`;
+                            window.location.href = appleRouteUrl;
+                            
+                            setTimeout(() => {
+                                if (document.hasFocus()) {
+                                    const googleRouteUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${koordinat}&travelmode=driving`;
+                                    window.open(googleRouteUrl, '_blank');
+                                }
+                            }, 500);
+                        } else {
+                            const googleRouteUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${koordinat}&travelmode=driving`;
+                            window.open(googleRouteUrl, '_blank');
+                        }
+                    },
+                    (err) => {
+                        clearTimeout(timeoutId);
+                        loading.style.display = 'none';
+                        
+                        if (err.code === 1) {
+                            if (confirm('Izinkan akses lokasi untuk rute terdekat?\n\nAtau buka lokasi di Maps saja?')) {
+                                bukaLokasiDiMaps(koordinat, nama);
+                            }
+                        } else {
+                            alert('Tidak dapat mendeteksi lokasi Anda.\nBuka lokasi di Maps saja.');
+                            bukaLokasiDiMaps(koordinat, nama);
+                        }
+                    },
+                    options
+                );
+            } else {
+                loading.style.display = 'none';
+                alert('Browser tidak mendukung navigasi lokasi.\nBuka lokasi di Maps saja.');
+                bukaLokasiDiMaps(koordinat, nama);
+            }
+        }
+
+        // Fungsi cari parkir terdekat
+        function cariParkirTerdekat() {
+            const btn = document.getElementById('btnCari');
+            if (!btn) return;
+            
+            btn.disabled = true;
+            
+            const loading = document.getElementById('loading');
+            if (!loading) return;
+            
+            loading.style.display = 'flex';
+            
+            getLocation()
+                .then(position => {
+                    loading.style.display = 'none';
+                    btn.disabled = false;
+                    
+                    hitungSemuaJarak();
+                    updateJarakDisplay();
+                    
+                    // Cari yang terdekat
+                    let terdekat = null;
+                    let jarakTerdekat = Infinity;
+                    
+                    dataParkir.forEach(lokasi => {
+                        const jarak = distancesCache.get(lokasi.id);
+                        if (jarak && jarak < jarakTerdekat) {
+                            jarakTerdekat = jarak;
+                            terdekat = { ...lokasi, jarak };
+                        }
+                    });
+                    
+                    if (terdekat) {
+                        const message = `🚗 PARKIR TERDEKAT\n\n📍 ${terdekat.nama}\n🏠 ${terdekat.alamat}\n📏 Jarak: ${formatJarak(terdekat.jarak)}\n\n🚀 Buka rute ke lokasi ini?`;
+                        
+                        if (confirm(message)) {
+                            ruteKeLokasi(terdekat.koordinat, terdekat.nama);
+                        }
+                    }
+                })
+                .catch(err => {
+                    loading.style.display = 'none';
+                    btn.disabled = false;
+                    
+                    if (err.message === 'Timeout') {
+                        alert('Waktu deteksi lokasi habis.\nSilakan pilih lokasi manual dari daftar.');
+                    } else if (err.code === 1) {
+                        alert('Izinkan akses lokasi untuk mencari parkir terdekat.\n\nBuka Settings → Privacy → Location Services.');
+                    } else {
+                        alert('Tidak dapat mendeteksi lokasi.\nSilakan pilih lokasi manual dari daftar.');
+                    }
+                });
+        }
+
+        // Inisialisasi
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLokasi();
+            
+            // Coba dapatkan lokasi user saat pertama kali load
+            getLocation()
+                .then(() => {
+                    hitungSemuaJarak();
+                    updateJarakDisplay();
+                })
+                .catch(err => {
+                    console.log('Lokasi tidak tersedia:', err.message);
+                    // Tetap tampilkan daftar tanpa jarak
+                });
+            
+            // Log device info
+            console.log('📱 Mobile Optimized Header v1.0');
+            console.log('🖥️  Screen Width:', window.innerWidth);
+            console.log('📱 Is Mobile:', window.innerWidth < 768);
+            
+            // Sembunyikan loading
+            setTimeout(() => {
+                const loading = document.getElementById('loading');
+                if (loading) loading.style.display = 'none';
+            }, 1000);
+        });
+
+        // Handle page visibility
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                const loading = document.getElementById('loading');
+                if (loading) {
+                    setTimeout(() => {
+                        loading.style.display = 'none';
+                    }, 300);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
