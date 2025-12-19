@@ -21,8 +21,11 @@
             --success-600: #059669;
             --danger-500: #ef4444;
             --danger-600: #dc2626;
+            --warning-500: #f59e0b;
+            --warning-600: #d97706;
+            --purple-500: #8b5cf6;
             
-            /* Neutral Colors - Lebih Lembut */
+            /* Neutral Colors */
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -88,7 +91,6 @@
             margin-bottom: 20px;
         }
         
-        /* Badge Operasi */
         .operation-badge {
             display: inline-block;
             background: linear-gradient(135deg, #DC2626, #B91C1C);
@@ -421,6 +423,127 @@
             background: linear-gradient(135deg, #ffffff, #f8fafc);
         }
         
+        /* STYLE KHUSUS KRIDOSONO */
+        .lokasi-item.kridosono {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border: 2px solid #f59e0b;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kridosono-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .kridosono-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .kridosono-operasional {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #fbbf24;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+        }
+        
+        .operasional-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .operasional-title::before {
+            content: '⚠️';
+            font-size: 18px;
+        }
+        
+        .periode-container {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .periode-item {
+            background: #fef3c7;
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid #fbbf24;
+            position: relative;
+        }
+        
+        .periode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #fbbf24;
+        }
+        
+        .periode-label {
+            font-size: 15px;
+            font-weight: 700;
+            color: #92400e;
+        }
+        
+        .periode-waktu {
+            font-size: 14px;
+            font-weight: 600;
+            color: #b45309;
+            background: #fde68a;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        .kapasitas-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .kapasitas-item {
+            text-align: center;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #fcd34d;
+        }
+        
+        .kapasitas-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .kapasitas-count {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gray-800);
+            margin-bottom: 4px;
+        }
+        
+        .kapasitas-label {
+            font-size: 13px;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+        
         .lokasi-header { 
             display: flex; 
             justify-content: space-between; 
@@ -579,36 +702,6 @@
             border-color: #a7f3d0;
         }
         
-        /* ====== FOOTER ====== */
-        .footer { 
-            text-align: center; 
-            padding: 30px 20px; 
-            color: white; 
-            font-size: clamp(13px, 3vw, 14px); 
-            background: linear-gradient(135deg, #1E3A8A, var(--primary-700));
-            line-height: 1.6;
-            border-top: 2px solid rgba(255, 215, 0, 0.3);
-        }
-        
-        .footer-logo {
-            font-size: clamp(20px, 5vw, 24px);
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: white;
-            letter-spacing: 0.5px;
-        }
-        
-        .footer p {
-            margin: 8px 0;
-            opacity: 0.9;
-        }
-        
-        .footer-copyright {
-            margin-top: 20px;
-            font-size: clamp(12px, 2.5vw, 13px);
-            opacity: 0.8;
-        }
-        
         /* ====== RESPONSIVE UTAMA ====== */
         @media (min-width: 768px) {
             .compact-header {
@@ -630,8 +723,30 @@
                 padding: 26px 24px;
             }
             
-            .footer {
-                padding: 30px 50px;
+            .periode-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .kapasitas-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .kapasitas-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .periode-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .periode-waktu {
+                align-self: flex-start;
             }
         }
         
@@ -665,6 +780,40 @@
                 padding: 12px 14px;
                 min-height: 44px;
             }
+            
+            .periode-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ====== FOOTER ====== */
+        .footer { 
+            text-align: center; 
+            padding: 30px 20px; 
+            color: white; 
+            font-size: clamp(13px, 3vw, 14px); 
+            background: linear-gradient(135deg, #1E3A8A, var(--primary-700));
+            line-height: 1.6;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .footer-logo {
+            font-size: clamp(20px, 5vw, 24px);
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+        
+        .footer p {
+            margin: 8px 0;
+            opacity: 0.9;
+        }
+        
+        .footer-copyright {
+            margin-top: 20px;
+            font-size: clamp(12px, 2.5vw, 13px);
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -764,6 +913,58 @@
             {id:15, nama:"STADION KRIDOSONO", alamat:"JL YOS SUDARSO", bus:0, mobil:0, motor:0, koordinat:"-7.7877683,110.3736898"}
         ];
 
+        // Data operasional khusus Kridosono
+        const kridosonoOperasional = {
+            periode1: {
+                label: "21 - 23 Desember 2025",
+                waktu: "19.00 WIB",
+                motor: "100 unit",
+                mobil: "20 unit"
+            },
+            periode2: {
+                label: "24 Desember 2025 - 2 Januari 2026",
+                waktu: "19.00 WIB",
+                motor: "200 unit",
+                mobil: "200 unit"
+            }
+        };
+
+        // Fungsi untuk mendapatkan kapasitas berdasarkan tanggal saat ini
+        function getKridosonoKapasitasHariIni() {
+            const today = new Date();
+            const todayStr = today.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            // Tanggal referensi
+            const startPeriode1 = new Date(2025, 11, 21); // 21 Des 2025
+            const endPeriode1 = new Date(2025, 11, 23); // 23 Des 2025
+            const startPeriode2 = new Date(2025, 11, 24); // 24 Des 2025
+            const endPeriode2 = new Date(2026, 0, 2); // 2 Jan 2026
+            
+            if (today >= startPeriode1 && today <= endPeriode1) {
+                return {
+                    mobil: 20,
+                    motor: 100,
+                    periode: "Periode 1 (21-23 Des 2025)"
+                };
+            } else if (today >= startPeriode2 && today <= endPeriode2) {
+                return {
+                    mobil: 200,
+                    motor: 200,
+                    periode: "Periode 2 (24 Des 2025 - 2 Jan 2026)"
+                };
+            } else {
+                return {
+                    mobil: 0,
+                    motor: 0,
+                    periode: "Tidak ada operasional khusus"
+                };
+            }
+        }
+
         let userPosition = null;
         const distancesCache = new Map();
         let isCalculating = false;
@@ -789,7 +990,6 @@
             }
         }
 
-        // Fungsi untuk mendapatkan lokasi user
         function getLocation() {
             return new Promise((resolve, reject) => {
                 if (userPosition) {
@@ -807,7 +1007,6 @@
                     return;
                 }
                 
-                // Tampilkan loading
                 showLoading('Mendeteksi lokasi Anda...');
                 
                 navigator.geolocation.getCurrentPosition(
@@ -825,23 +1024,20 @@
                     },
                     {
                         enableHighAccuracy: true,
-                        timeout: 8000, // Timeout lebih pendek
+                        timeout: 8000,
                         maximumAge: 0
                     }
                 );
             });
         }
 
-        // Fungsi untuk menghitung semua jarak
         async function hitungSemuaJarak() {
             if (!userPosition) return;
             
-            // Tampilkan loading untuk perhitungan jarak
             showLoading('Menghitung jarak ke lokasi parkir...');
             
             distancesCache.clear();
             
-            // Hitung jarak untuk semua lokasi
             for (const lokasi of dataParkir) {
                 try {
                     const [lokasiLat, lokasiLng] = lokasi.koordinat.split(',').map(Number);
@@ -853,10 +1049,8 @@
                     );
                     distancesCache.set(lokasi.id, jarak);
                     
-                    // Update UI secara bertahap
                     updateJarakDisplay(lokasi.id, jarak);
                     
-                    // Beri sedikit delay agar tidak terlalu cepat
                     await delay(50);
                 } catch (error) {
                     console.error(`Error menghitung jarak untuk ${lokasi.nama}:`, error);
@@ -867,12 +1061,10 @@
             hideLoading();
         }
 
-        // Helper function untuk delay
         function delay(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        // Fungsi loading
         function showLoading(message) {
             const overlay = document.getElementById('loadingOverlay');
             if (overlay) {
@@ -891,7 +1083,6 @@
             }
         }
 
-        // Update tampilan jarak untuk lokasi tertentu
         function updateJarakDisplay(lokasiId, jarak) {
             const jarakElements = document.querySelectorAll('.lokasi-jarak');
             jarakElements.forEach((element) => {
@@ -899,8 +1090,8 @@
                 if (lokasiElement) {
                     const lokasiNama = lokasiElement.querySelector('.lokasi-nama');
                     if (lokasiNama) {
-                        // Cari lokasi berdasarkan nama
-                        const lokasi = dataParkir.find(l => l.nama === lokasiNama.textContent);
+                        const namaText = lokasiNama.textContent.replace(' ⚠️ OPERASIONAL KHUSUS', '');
+                        const lokasi = dataParkir.find(l => l.nama === namaText);
                         if (lokasi && lokasi.id === lokasiId) {
                             element.textContent = `📏 ${formatJarak(jarak)} dari lokasi Anda`;
                             element.classList.remove('lokasi-jarak-loading');
@@ -910,7 +1101,6 @@
             });
         }
 
-        // ====== FUNGSI URUTKAN PARKIR TERDEKAT ======
         async function cariParkirTerdekat() {
             const btn = document.getElementById('btnCari');
             if (!btn) return;
@@ -918,24 +1108,20 @@
             btn.disabled = true;
             
             try {
-                // Jika belum ada lokasi user, dapatkan dulu
                 if (!userPosition) {
                     await getLocation();
                 }
                 
-                // Jika jarak belum dihitung, hitung dulu
                 if (distancesCache.size === 0) {
                     await hitungSemuaJarak();
                 }
                 
-                // Urutkan data berdasarkan jarak
                 dataParkir.sort((a, b) => {
                     const jarakA = distancesCache.get(a.id) || Infinity;
                     const jarakB = distancesCache.get(b.id) || Infinity;
                     return jarakA - jarakB;
                 });
                 
-                // Render ulang dengan urutan baru
                 renderLokasi();
                 
                 console.log('✅ Parkir berhasil diurutkan berdasarkan jarak');
@@ -956,7 +1142,6 @@
             }
         }
 
-        // Render lokasi ke HTML
         function renderLokasi() {
             const container = document.getElementById('lokasiList');
             if (!container) return;
@@ -970,10 +1155,24 @@
                     '📏 Mendeteksi lokasi...';
                 const jarakClass = jarak ? '' : 'lokasi-jarak-loading';
                 
+                const isKridosono = lokasi.nama === "STADION KRIDOSONO";
+                const kridosonoClass = isKridosono ? ' kridosono' : '';
+                const kridosonoBadge = isKridosono ? ' <span class="kridosono-badge">⚠️ OPERASIONAL KHUSUS</span>' : '';
+                
+                // Ambil kapasitas berdasarkan periode saat ini
+                let kapasitasMobil = lokasi.mobil;
+                let kapasitasMotor = lokasi.motor;
+                
+                if (isKridosono) {
+                    const kapasitasHariIni = getKridosonoKapasitasHariIni();
+                    kapasitasMobil = kapasitasHariIni.mobil;
+                    kapasitasMotor = kapasitasHariIni.motor;
+                }
+                
                 html += `
-                    <div class="lokasi-item">
+                    <div class="lokasi-item${kridosonoClass}">
                         <div class="lokasi-header">
-                            <div class="lokasi-nama">${lokasi.nama}</div>
+                            <div class="lokasi-nama">${lokasi.nama}${kridosonoBadge}</div>
                             <div class="lokasi-id">${index + 1}</div>
                         </div>
                         <div class="lokasi-alamat">${lokasi.alamat}</div>
@@ -988,21 +1187,72 @@
                                     <span class="kap-label">Bus</span>
                                 </span>
                             ` : ''}
-                            ${lokasi.mobil > 0 ? `
+                            ${kapasitasMobil > 0 ? `
                                 <span class="kap-badge badge-mobil">
                                     <span class="kap-icon">🚗</span>
-                                    <span class="kap-number">${lokasi.mobil}</span>
+                                    <span class="kap-number">${kapasitasMobil}</span>
                                     <span class="kap-label">Mobil</span>
                                 </span>
                             ` : ''}
-                            ${lokasi.motor > 0 ? `
+                            ${kapasitasMotor > 0 ? `
                                 <span class="kap-badge badge-motor">
                                     <span class="kap-icon">🏍️</span>
-                                    <span class="kap-number">${lokasi.motor}</span>
+                                    <span class="kap-number">${kapasitasMotor}</span>
                                     <span class="kap-label">Motor</span>
                                 </span>
                             ` : ''}
                         </div>
+                `;
+                
+                // Tambahkan info operasional khusus untuk Kridosono
+                if (isKridosono) {
+                    html += `
+                        <div class="kridosono-operasional">
+                            <div class="operasional-title">INFO OPERASIONAL KHUSUS</div>
+                            <div class="periode-container">
+                                <div class="periode-item">
+                                    <div class="periode-header">
+                                        <div class="periode-label">${kridosonoOperasional.periode1.label}</div>
+                                        <div class="periode-waktu">${kridosonoOperasional.periode1.waktu}</div>
+                                    </div>
+                                    <div class="kapasitas-grid">
+                                        <div class="kapasitas-item">
+                                            <div class="kapasitas-icon">🏍️</div>
+                                            <div class="kapasitas-count">${kridosonoOperasional.periode1.motor}</div>
+                                            <div class="kapasitas-label">Motor</div>
+                                        </div>
+                                        <div class="kapasitas-item">
+                                            <div class="kapasitas-icon">🚗</div>
+                                            <div class="kapasitas-count">${kridosonoOperasional.periode1.mobil}</div>
+                                            <div class="kapasitas-label">Mobil</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="periode-item">
+                                    <div class="periode-header">
+                                        <div class="periode-label">${kridosonoOperasional.periode2.label}</div>
+                                        <div class="periode-waktu">${kridosonoOperasional.periode2.waktu}</div>
+                                    </div>
+                                    <div class="kapasitas-grid">
+                                        <div class="kapasitas-item">
+                                            <div class="kapasitas-icon">🏍️</div>
+                                            <div class="kapasitas-count">${kridosonoOperasional.periode2.motor}</div>
+                                            <div class="kapasitas-label">Motor</div>
+                                        </div>
+                                        <div class="kapasitas-item">
+                                            <div class="kapasitas-icon">🚗</div>
+                                            <div class="kapasitas-count">${kridosonoOperasional.periode2.mobil}</div>
+                                            <div class="kapasitas-label">Mobil</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                html += `
                         <div class="lokasi-actions">
                             <button class="btn-action btn-map" onclick="bukaLokasiDiMaps('${lokasi.koordinat}', '${lokasi.nama}')">
                                 <span>🗺️</span> Lihat di Maps
@@ -1018,7 +1268,6 @@
             container.innerHTML = html;
         }
 
-        // ====== FUNGSI MAPS ======
         function bukaLokasiDiMaps(koordinat, nama) {
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             
@@ -1066,19 +1315,14 @@
 
         // ====== INISIALISASI ======
         document.addEventListener('DOMContentLoaded', async () => {
-            // Render lokasi pertama kali tanpa jarak
             renderLokasi();
             
-            // Coba dapatkan lokasi user secara otomatis saat halaman load
             try {
                 await getLocation();
-                
-                // Setelah dapat lokasi, hitung jarak ke semua parkir
                 await hitungSemuaJarak();
                 
             } catch (error) {
                 console.log('Lokasi tidak tersedia:', error.message);
-                // Tetap tampilkan lokasi tanpa jarak
             }
         });
     </script>
