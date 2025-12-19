@@ -449,99 +449,128 @@
             margin-left: 10px;
         }
         
-        .kridosono-operasional {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
+        /* TOMBOL INFO OPERASIONAL (SOLUSI BARU) */
+        .info-operasional-toggle {
+            width: 100%;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
             border: 1px solid #fbbf24;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: var(--transition-base);
+            margin: 15px 0;
             box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
         }
         
-        .operasional-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #92400e;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .info-operasional-toggle:active {
+            transform: translateY(-1px);
+            background: linear-gradient(135deg, #fde68a, #fcd34d);
         }
         
-        .operasional-title::before {
-            content: '⚠️';
+        .info-operasional-toggle.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom: none;
+        }
+        
+        .toggle-icon {
             font-size: 18px;
+            transition: var(--transition-base);
         }
         
-        .periode-container {
-            display: grid;
-            gap: 16px;
-            margin-bottom: 20px;
+        .info-operasional-toggle.active .toggle-icon {
+            transform: rotate(180deg);
         }
         
-        .periode-item {
-            background: #fef3c7;
-            border-radius: 10px;
-            padding: 16px;
+        /* KONTEN INFO OPERASIONAL SEDERHANA (TERSEMBUNYI DEFAULT) */
+        .info-operasional-content {
+            max-height: 0;
+            overflow: hidden;
+            background: white;
+            border-radius: 0 0 12px 12px;
             border: 1px solid #fbbf24;
-            position: relative;
+            border-top: none;
+            transition: max-height 0.3s ease-out;
+            margin: -1px 0 15px 0;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
         }
         
-        .periode-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 10px;
+        .info-operasional-content.expanded {
+            max-height: 300px; /* Cukup untuk konten sederhana */
+        }
+        
+        .operasional-simple {
+            padding: 20px;
+        }
+        
+        /* STYLE PERIODE SEDERHANA */
+        .periode-simple {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
             border-bottom: 1px dashed #fbbf24;
         }
         
-        .periode-label {
-            font-size: 15px;
+        .periode-simple:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .periode-title {
+            font-size: 16px;
             font-weight: 700;
             color: #92400e;
+            margin-bottom: 6px;
         }
         
         .periode-waktu {
             font-size: 14px;
-            font-weight: 600;
             color: #b45309;
-            background: #fde68a;
-            padding: 4px 10px;
-            border-radius: 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
-        .kapasitas-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+        .periode-waktu::before {
+            content: '⏰';
+            font-size: 15px;
         }
         
-        .kapasitas-item {
-            text-align: center;
-            padding: 12px;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #fcd34d;
+        .periode-kapasitas {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
-        .kapasitas-icon {
-            font-size: 20px;
-            margin-bottom: 8px;
-            display: block;
-        }
-        
-        .kapasitas-count {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--gray-800);
-            margin-bottom: 4px;
-        }
-        
-        .kapasitas-label {
-            font-size: 13px;
-            color: var(--gray-600);
+        /* BADGE KAPASITAS SEDERHANA (Seperti item lain) */
+        .simple-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 16px;
+            font-size: 14px;
             font-weight: 600;
+            border: 1px solid transparent;
+        }
+        
+        .simple-badge.mobil {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            color: var(--primary-700);
+            border-color: #93c5fd;
+        }
+        
+        .simple-badge.motor {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            color: var(--success-600);
+            border-color: #86efac;
         }
         
         .lokasi-header { 
@@ -723,30 +752,8 @@
                 padding: 26px 24px;
             }
             
-            .periode-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-            
-            .kapasitas-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        @media (max-width: 767px) {
-            .kapasitas-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            
-            .periode-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            
-            .periode-waktu {
-                align-self: flex-start;
+            .periode-kapasitas {
+                flex-wrap: nowrap;
             }
         }
         
@@ -779,10 +786,6 @@
             .btn-action {
                 padding: 12px 14px;
                 min-height: 44px;
-            }
-            
-            .periode-container {
-                grid-template-columns: 1fr;
             }
         }
         
@@ -1101,6 +1104,24 @@
             });
         }
 
+        // ====== FUNGSI TOGGLE INFO OPERASIONAL ======
+        function toggleInfoOperasional(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('.toggle-icon');
+            
+            if (content.classList.contains('expanded')) {
+                // Tutup
+                content.classList.remove('expanded');
+                button.classList.remove('active');
+                icon.textContent = '🔽';
+            } else {
+                // Buka
+                content.classList.add('expanded');
+                button.classList.add('active');
+                icon.textContent = '🔼';
+            }
+        }
+
         async function cariParkirTerdekat() {
             const btn = document.getElementById('btnCari');
             if (!btn) return;
@@ -1204,47 +1225,43 @@
                         </div>
                 `;
                 
-                // Tambahkan info operasional khusus untuk Kridosono
+                // Tambahkan tombol dan konten info operasional khusus untuk Kridosono
                 if (isKridosono) {
                     html += `
-                        <div class="kridosono-operasional">
-                            <div class="operasional-title">INFO OPERASIONAL KHUSUS</div>
-                            <div class="periode-container">
-                                <div class="periode-item">
-                                    <div class="periode-header">
-                                        <div class="periode-label">${kridosonoOperasional.periode1.label}</div>
-                                        <div class="periode-waktu">${kridosonoOperasional.periode1.waktu}</div>
-                                    </div>
-                                    <div class="kapasitas-grid">
-                                        <div class="kapasitas-item">
-                                            <div class="kapasitas-icon">🏍️</div>
-                                            <div class="kapasitas-count">${kridosonoOperasional.periode1.motor}</div>
-                                            <div class="kapasitas-label">Motor</div>
-                                        </div>
-                                        <div class="kapasitas-item">
-                                            <div class="kapasitas-icon">🚗</div>
-                                            <div class="kapasitas-count">${kridosonoOperasional.periode1.mobil}</div>
-                                            <div class="kapasitas-label">Mobil</div>
-                                        </div>
+                        <!-- TOMBOL INFO OPERASIONAL KHUSUS -->
+                        <button class="info-operasional-toggle" onclick="toggleInfoOperasional(this)">
+                            <span>📅 INFO OPERASIONAL KHUSUS</span>
+                            <span class="toggle-icon">🔽</span>
+                        </button>
+                        
+                        <!-- KONTEN INFO SEDERHANA -->
+                        <div class="info-operasional-content">
+                            <div class="operasional-simple">
+                                <!-- PERIODE 1 -->
+                                <div class="periode-simple">
+                                    <div class="periode-title">21-23 Desember</div>
+                                    <div class="periode-waktu">19.00 WIB</div>
+                                    <div class="periode-kapasitas">
+                                        <span class="simple-badge mobil">
+                                            🚗 ${kridosonoOperasional.periode1.mobil}
+                                        </span>
+                                        <span class="simple-badge motor">
+                                            🏍️ ${kridosonoOperasional.periode1.motor}
+                                        </span>
                                     </div>
                                 </div>
                                 
-                                <div class="periode-item">
-                                    <div class="periode-header">
-                                        <div class="periode-label">${kridosonoOperasional.periode2.label}</div>
-                                        <div class="periode-waktu">${kridosonoOperasional.periode2.waktu}</div>
-                                    </div>
-                                    <div class="kapasitas-grid">
-                                        <div class="kapasitas-item">
-                                            <div class="kapasitas-icon">🏍️</div>
-                                            <div class="kapasitas-count">${kridosonoOperasional.periode2.motor}</div>
-                                            <div class="kapasitas-label">Motor</div>
-                                        </div>
-                                        <div class="kapasitas-item">
-                                            <div class="kapasitas-icon">🚗</div>
-                                            <div class="kapasitas-count">${kridosonoOperasional.periode2.mobil}</div>
-                                            <div class="kapasitas-label">Mobil</div>
-                                        </div>
+                                <!-- PERIODE 2 -->
+                                <div class="periode-simple">
+                                    <div class="periode-title">24 Desember - 2 Januari</div>
+                                    <div class="periode-waktu">19.00 WIB</div>
+                                    <div class="periode-kapasitas">
+                                        <span class="simple-badge mobil">
+                                            🚗 ${kridosonoOperasional.periode2.mobil}
+                                        </span>
+                                        <span class="simple-badge motor">
+                                            🏍️ ${kridosonoOperasional.periode2.motor}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
