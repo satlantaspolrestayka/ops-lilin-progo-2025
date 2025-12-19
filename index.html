@@ -79,7 +79,135 @@
             line-height: 1.5;
         }
         
-        /* ====== HEADER UTAMA - DIKURANGI SHADOW ====== */
+        /* ====== GPS NOTIFICATION - DIPERBAIKI ====== */
+        .gps-notification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 41, 128, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: var(--z-modal);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .gps-notification.show {
+            display: flex;
+        }
+        
+        .notification-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .notification-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--gray-500);
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition-fast);
+        }
+        
+        .notification-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-800);
+        }
+        
+        .notification-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #f59e0b;
+        }
+        
+        .notification-message {
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 600;
+            color: var(--gray-800);
+            line-height: 1.5;
+            margin-bottom: 25px;
+            padding: 0 10px;
+        }
+        
+        .notification-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .notification-button {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition-base);
+        }
+        
+        .notification-button-primary {
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .notification-button-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+        
+        .notification-button:active {
+            transform: scale(0.98);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ====== CONTAINER ====== */
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* ====== HEADER UTAMA ====== */
         .main-header { 
             background: linear-gradient(135deg, #1E3A8A, var(--primary-700)); 
             color: white; 
@@ -125,7 +253,6 @@
             margin-top: 8px;
         }
         
-        /* Badge Operasi - Shadow lebih soft */
         .operation-badge {
             display: inline-block;
             background: linear-gradient(135deg, #DC2626, #B91C1C);
@@ -140,17 +267,6 @@
             letter-spacing: 0.5px;
         }
         
-        /* ====== CONTAINER - SHADOW LEBIH HALUS ====== */
-        .container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            background: white; 
-            border-radius: 20px; 
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-            position: relative;
-            overflow: hidden;
-        }
-        
         /* ====== MOBILE COMPACT HEADER ====== */
         .compact-header {
             background: white;
@@ -158,7 +274,6 @@
             border-bottom: 1px solid var(--gray-200);
         }
         
-        /* Jumlah Lokasi Parkir - Shadow lebih halus */
         .total-locations {
             text-align: center;
             margin-bottom: 20px;
@@ -197,7 +312,6 @@
             letter-spacing: 0.5px;
         }
         
-        /* Tiga Tab Kapasitas - Shadow lebih lembut */
         .capacity-tabs {
             display: flex;
             gap: 10px;
@@ -242,7 +356,6 @@
             letter-spacing: 0.5px;
         }
         
-        /* Warna untuk setiap tab */
         .tab-bus .tab-icon { color: var(--danger-500); }
         .tab-bus .tab-number { color: var(--danger-600); }
         .tab-bus { border-top: 3px solid var(--danger-500); }
@@ -254,58 +367,6 @@
         .tab-motor .tab-icon { color: var(--success-500); }
         .tab-motor .tab-number { color: var(--success-600); }
         .tab-motor { border-top: 3px solid var(--success-500); }
-        
-        /* ====== DESKTOP HEADER ====== */
-        .desktop-stats {
-            display: none;
-            background: var(--gray-50);
-            padding: 30px 40px;
-            border-bottom: 1px solid var(--gray-200);
-        }
-        
-        .desktop-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .desktop-stat {
-            background: white;
-            border-radius: 20px;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: var(--shadow-medium);
-            border: 1px solid var(--gray-200);
-            transition: var(--transition-base);
-        }
-        
-        .desktop-stat:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.09);
-        }
-        
-        .desktop-stat-icon {
-            font-size: 36px;
-            margin-bottom: 20px;
-            display: block;
-        }
-        
-        .desktop-stat-number { 
-            font-size: clamp(32px, 8vw, 40px); 
-            font-weight: 700; 
-            color: var(--gray-800); 
-            margin-bottom: 8px;
-        }
-        
-        .desktop-stat-label { 
-            font-size: clamp(13px, 3vw, 14px); 
-            color: var(--gray-500); 
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
         
         /* ====== ACTIONS SECTION ====== */
         .actions-section {
@@ -387,7 +448,7 @@
             border-radius: 2px;
         }
         
-        /* ====== LOKASI LIST - SHADOW LEBIH HALUS ====== */
+        /* ====== LOKASI LIST ====== */
         .lokasi-list {
             display: flex;
             flex-direction: column;
@@ -403,7 +464,6 @@
             box-shadow: var(--shadow-card);
             position: relative;
             overflow: hidden;
-            animation: slideUp 0.4s ease-out both;
         }
         
         .lokasi-item::before {
@@ -482,7 +542,6 @@
             opacity: 0.7;
         }
         
-        /* INFORMASI JARAK */
         .lokasi-jarak {
             display: flex;
             align-items: center;
@@ -534,7 +593,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* KAPASITAS KENDARAAN */
         .kapasitas-container {
             display: flex;
             flex-wrap: wrap;
@@ -626,33 +684,6 @@
             background: linear-gradient(135deg, #ecfdf5, #d1fae5);
         }
         
-        /* ====== LOADING OVERLAY ====== */
-        .loading { 
-            display: none; 
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255,255,255,0.96);
-            z-index: var(--z-modal-backdrop);
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .spinner { 
-            border: 4px solid var(--gray-100); 
-            border-top: 4px solid var(--primary-500); 
-            border-radius: 50%; 
-            width: 60px; 
-            height: 60px; 
-            animation: spin 1s linear infinite; 
-            margin-bottom: 25px;
-        }
-        
         /* ====== FOOTER ====== */
         .footer { 
             text-align: center; 
@@ -683,23 +714,6 @@
             opacity: 0.8;
         }
         
-        /* ====== ANIMASI YANG LEBIH HALUS ====== */
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
         /* ====== RESPONSIVE DESIGN ====== */
         
         /* Desktop (≥ 768px) */
@@ -710,7 +724,6 @@
             
             .container {
                 border-radius: 20px;
-                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.07);
             }
             
             .main-header {
@@ -725,10 +738,6 @@
             
             .compact-header {
                 display: none;
-            }
-            
-            .desktop-stats {
-                display: block;
             }
             
             .actions-section {
@@ -753,255 +762,23 @@
                 padding: 30px 50px;
             }
         }
-        
-        /* Tablet (640px - 768px) */
-        @media (min-width: 640px) and (max-width: 767px) {
-            .compact-header {
-                padding: 25px 20px;
-            }
-            
-            .total-locations {
-                padding: 25px 20px;
-            }
-            
-            .capacity-tabs {
-                gap: 15px;
-            }
-            
-            .capacity-tab {
-                padding: 20px 15px;
-            }
-            
-            .actions-section,
-            .main-content {
-                padding: 0 20px 25px;
-            }
-            
-            .lokasi-list {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 18px;
-            }
-        }
-        
-        /* Mobile Small (≤ 375px) */
-        @media (max-width: 375px) {
-            body {
-                padding: 15px;
-            }
-            
-            .container {
-                border-radius: 18px;
-            }
-            
-            .main-header {
-                padding: 25px 15px;
-            }
-            
-            .header-icon {
-                width: 70px;
-                height: 70px;
-                font-size: 36px;
-            }
-            
-            .compact-header {
-                padding: 15px;
-            }
-            
-            .capacity-tabs {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .capacity-tab {
-                display: flex;
-                align-items: center;
-                text-align: left;
-                padding: 16px 15px;
-                gap: 20px;
-            }
-            
-            .tab-icon {
-                margin-bottom: 0;
-                font-size: 24px;
-                flex-shrink: 0;
-            }
-            
-            .tab-number {
-                margin-bottom: 0;
-                margin-right: auto;
-                font-size: 24px;
-            }
-            
-            .btn-action {
-                padding: 12px 14px;
-                min-height: 44px;
-            }
-        }
-        
-        /* Stagger animation untuk item lokasi */
-        .lokasi-item:nth-child(n) { 
-            animation-delay: calc(0.04s * var(--item-index, 0));
-        }
-        
-        /* Dark Mode - LEBIH LEMBUT */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #0F172A, #1E293B, #334155);
-            }
-            
-            .container {
-                background: var(--gray-800);
-                color: var(--gray-100);
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            }
-            
-            .main-header {
-                background: linear-gradient(135deg, #0F172A, #1E293B);
-                border-bottom-color: rgba(255, 215, 0, 0.3);
-            }
-            
-            .main-header p {
-                color: rgba(255, 255, 255, 0.85);
-            }
-            
-            .compact-header {
-                background: var(--gray-800);
-                border-bottom-color: var(--gray-700);
-            }
-            
-            .total-locations {
-                background: rgba(51, 65, 85, 0.7);
-                border-color: var(--gray-700);
-                color: var(--gray-100);
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            }
-            
-            .total-number {
-                color: #60a5fa;
-            }
-            
-            .total-label {
-                color: var(--gray-300);
-            }
-            
-            .capacity-tab {
-                background: rgba(51, 65, 85, 0.7);
-                border-color: var(--gray-700);
-                color: var(--gray-100);
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            }
-            
-            .tab-label {
-                color: var(--gray-300);
-            }
-            
-            .desktop-stats {
-                background: var(--gray-800);
-                border-bottom-color: var(--gray-700);
-            }
-            
-            .desktop-stat {
-                background: rgba(51, 65, 85, 0.7);
-                border-color: var(--gray-700);
-                color: var(--gray-100);
-            }
-            
-            .desktop-stat-number {
-                color: var(--gray-100);
-            }
-            
-            .desktop-stat-label {
-                color: var(--gray-300);
-            }
-            
-            .main-content {
-                background: var(--gray-800);
-            }
-            
-            .section-title {
-                color: var(--gray-100);
-            }
-            
-            .lokasi-item {
-                background: var(--gray-700);
-                border-color: var(--gray-600);
-                color: var(--gray-100);
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            }
-            
-            .lokasi-nama {
-                color: var(--gray-50);
-            }
-            
-            .lokasi-alamat {
-                color: var(--gray-300);
-            }
-            
-            .lokasi-jarak {
-                background: var(--gray-800);
-                color: #93c5fd;
-                border-color: var(--primary-600);
-            }
-            
-            .lokasi-jarak-loading {
-                background: linear-gradient(90deg, var(--gray-800), var(--gray-700), var(--gray-800));
-                border-color: var(--gray-600);
-            }
-            
-            .kap-badge {
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            }
-            
-            .badge-bus { 
-                background: linear-gradient(135deg, #7f1d1d, #991b1b);
-                color: #fca5a5;
-                border-color: #dc2626;
-            }
-            
-            .badge-mobil { 
-                background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
-                color: #93c5fd;
-                border-color: #3b82f6;
-            }
-            
-            .badge-motor { 
-                background: linear-gradient(135deg, #064e3b, #065f46);
-                color: #a7f3d0;
-                border-color: #10b981;
-            }
-            
-            .btn-action {
-                background: var(--gray-800);
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            }
-            
-            .btn-map { 
-                background: linear-gradient(135deg, var(--gray-800), #1e3a8a);
-                color: #93c5fd;
-                border-color: var(--primary-600);
-            }
-            
-            .btn-route { 
-                background: linear-gradient(135deg, var(--gray-800), #064e3b);
-                color: #a7f3d0;
-                border-color: var(--success-600);
-            }
-            
-            .footer {
-                background: linear-gradient(135deg, #0F172A, #1E293B);
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- GPS NOTIFICATION -->
+    <!-- GPS NOTIFICATION - DIPERBAIKI -->
     <div class="gps-notification" id="gpsNotification">
         <div class="notification-content">
-            <button class="notification-close" onclick="hideNotification()">×</button>
-            <div class="notification-icon">⚠️</div>
-            <p class="notification-message">Mohon aktifkan GPS untuk mengakses halaman ini</p>
-            <button class="notification-button" onclick="hideNotification()">TUTUP</button>
+            <button class="notification-close" onclick="handleNotificationClose()">×</button>
+            <div class="notification-icon">📍</div>
+            <p class="notification-message">Aktifkan GPS untuk mencari parkir terdekat</p>
+            <div class="notification-buttons">
+                <button class="notification-button notification-button-primary" onclick="enableGPSAndSearch()">
+                    AKTIFKAN GPS
+                </button>
+                <button class="notification-button notification-button-secondary" onclick="hideNotification()">
+                    NANTI SAJA
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1016,65 +793,27 @@
             </div>
         </div>
         
-        <!-- DESKTOP STATS HEADER -->
-        <div class="desktop-stats">
-            <div class="desktop-stats-grid">
-                <!-- Total Lokasi -->
-                <div class="desktop-stat">
-                    <div class="desktop-stat-icon">📍</div>
-                    <div class="desktop-stat-number">15</div>
-                    <div class="desktop-stat-label">Lokasi Parkir</div>
-                </div>
-                
-                <!-- Bus -->
-                <div class="desktop-stat">
-                    <div class="desktop-stat-icon">🚌</div>
-                    <div class="desktop-stat-number">484</div>
-                    <div class="desktop-stat-label">Kapasitas Bus</div>
-                </div>
-                
-                <!-- Mobil -->
-                <div class="desktop-stat">
-                    <div class="desktop-stat-icon">🚗</div>
-                    <div class="desktop-stat-number">1,610</div>
-                    <div class="desktop-stat-label">Kapasitas Mobil</div>
-                </div>
-                
-                <!-- Motor -->
-                <div class="desktop-stat">
-                    <div class="desktop-stat-icon">🏍️</div>
-                    <div class="desktop-stat-number">1,682</div>
-                    <div class="desktop-stat-label">Kapasitas Motor</div>
-                </div>
-            </div>
-        </div>
-        
         <!-- MOBILE COMPACT HEADER -->
         <div class="compact-header">
-            <!-- Jumlah Lokasi Parkir -->
             <div class="total-locations">
                 <div class="total-icon">📍</div>
                 <div class="total-number">15</div>
                 <div class="total-label">LOKASI PARKIR</div>
             </div>
             
-            <!-- Tiga Tab Kapasitas -->
             <div class="capacity-tabs">
-                <!-- Bus -->
                 <div class="capacity-tab tab-bus">
                     <div class="tab-icon">🚌</div>
                     <div class="tab-number">484</div>
                     <div class="tab-label">BUS</div>
                 </div>
                 
-                <!-- Mobil -->
                 <div class="capacity-tab tab-mobil">
                     <div class="tab-icon">🚗</div>
                     <div class="tab-number">1,610</div>
                     <div class="tab-label">MOBIL</div>
                 </div>
                 
-                <!-- Motor -->
                 <div class="capacity-tab tab-motor">
                     <div class="tab-icon">🏍️</div>
                     <div class="tab-number">1,682</div>
@@ -1112,15 +851,8 @@
         </div>
     </div>
 
-    <!-- LOADING OVERLAY -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p style="margin-top: 15px; font-weight: 600; color: var(--gray-800); font-size: 16px;">Mengurutkan lokasi...</p>
-        <p style="margin-top: 8px; font-size: 13px; color: var(--gray-500);">Harap tunggu sebentar</p>
-    </div>
-
     <script>
-        // Data parkir (tetap sama)
+        // Data parkir
         const dataParkir = [
             {id:1, nama:"SENOPATI", alamat:"JL P. SENOPATI", bus:62, mobil:200, motor:0, koordinat:"-7.8017074,110.3681792"},
             {id:2, nama:"NGABEAN", alamat:"JL W. HASYIM", bus:60, mobil:80, motor:100, koordinat:"-7.8014685,110.3562862"},
@@ -1139,52 +871,15 @@
             {id:15, nama:"STADION KRIDOSONO", alamat:"JL YOS SUDARSO", bus:0, mobil:0, motor:0, koordinat:"-7.7877683,110.3736898"}
         ];
 
-        // Global variables (tetap sama seperti sebelumnya)
         let userPosition = null;
         const distancesCache = new Map();
-        let isSortedByDistance = false;
-        let animationEnabled = true;
         let isGettingLocation = false;
-        let activeTimeouts = [];
-        let visibilityChangeHandler = null;
 
-        // [Semua fungsi JavaScript tetap sama seperti sebelumnya]
-        // Karena perubahan hanya di CSS untuk mengurangi shadow
-        
-        // ====== UTILITY FUNCTIONS ======
-        function cleanupTimeouts() {
-            activeTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
-            activeTimeouts = [];
-        }
-
-        function safeParseCoordinates(coordString) {
-            try {
-                const [lat, lng] = coordString.split(',').map(Number);
-                if (isNaN(lat) || isNaN(lng)) {
-                    throw new Error('Invalid coordinates');
-                }
-                return [lat, lng];
-            } catch (error) {
-                console.error('Error parsing coordinates:', coordString, error);
-                return [0, 0];
-            }
-        }
-
-        function sanitizeText(text) {
-            return String(text).replace(/[<>]/g, '');
-        }
-
-        // ====== FUNGSI NOTIFIKASI GPS ======
+        // ====== FUNGSI NOTIFIKASI GPS - DIPERBAIKI ======
         function showNotification() {
-            const notificationSeen = localStorage.getItem('gpsNotificationSeen');
-            if (!notificationSeen) {
-                const timeoutId = setTimeout(() => {
-                    const notification = document.getElementById('gpsNotification');
-                    if (notification) {
-                        notification.classList.add('show');
-                    }
-                }, 800);
-                activeTimeouts.push(timeoutId);
+            const notification = document.getElementById('gpsNotification');
+            if (notification) {
+                notification.classList.add('show');
             }
         }
 
@@ -1192,8 +887,19 @@
             const notification = document.getElementById('gpsNotification');
             if (notification) {
                 notification.classList.remove('show');
-                localStorage.setItem('gpsNotificationSeen', 'true');
             }
+        }
+
+        function handleNotificationClose() {
+            hideNotification();
+            // Simpan preference user untuk tidak menampilkan notifikasi lagi
+            localStorage.setItem('gpsNotificationDismissed', 'true');
+        }
+
+        function enableGPSAndSearch() {
+            hideNotification();
+            // Langsung coba cari parkir setelah user mengklik "AKTIFKAN GPS"
+            cariParkirTerdekat();
         }
 
         // ====== FUNGSI UTAMA ======
@@ -1217,7 +923,7 @@
             }
         }
 
-        function getLocation(maxRetries = 2) {
+        function getLocation() {
             return new Promise((resolve, reject) => {
                 if (userPosition) {
                     resolve(userPosition);
@@ -1225,49 +931,39 @@
                 }
                 
                 if (isGettingLocation) {
-                    reject(new Error('Location request already in progress'));
+                    reject(new Error('Sedang mencari lokasi...'));
                     return;
                 }
                 
                 isGettingLocation = true;
-                let retries = 0;
                 
-                const attemptGetLocation = () => {
-                    if (!navigator.geolocation) {
-                        isGettingLocation = false;
-                        reject(new Error('Geolocation not supported'));
-                        return;
-                    }
-                    
-                    const options = {
-                        enableHighAccuracy: true,
-                        timeout: 8000,
-                        maximumAge: 0
-                    };
-                    
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            isGettingLocation = false;
-                            userPosition = {
-                                lat: pos.coords.latitude,
-                                lng: pos.coords.longitude
-                            };
-                            resolve(userPosition);
-                        },
-                        (err) => {
-                            retries++;
-                            if (retries < maxRetries) {
-                                setTimeout(attemptGetLocation, 1000);
-                            } else {
-                                isGettingLocation = false;
-                                reject(err);
-                            }
-                        },
-                        options
-                    );
+                if (!navigator.geolocation) {
+                    isGettingLocation = false;
+                    reject(new Error('Browser tidak mendukung GPS'));
+                    return;
+                }
+                
+                const options = {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
                 };
                 
-                attemptGetLocation();
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        isGettingLocation = false;
+                        userPosition = {
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude
+                        };
+                        resolve(userPosition);
+                    },
+                    (err) => {
+                        isGettingLocation = false;
+                        reject(err);
+                    },
+                    options
+                );
             });
         }
 
@@ -1278,7 +974,7 @@
             
             dataParkir.forEach(lokasi => {
                 try {
-                    const [lokasiLat, lokasiLng] = safeParseCoordinates(lokasi.koordinat);
+                    const [lokasiLat, lokasiLng] = lokasi.koordinat.split(',').map(Number);
                     const jarak = hitungJarak(
                         userPosition.lat,
                         userPosition.lng,
@@ -1287,83 +983,56 @@
                     );
                     distancesCache.set(lokasi.id, jarak);
                 } catch (error) {
-                    console.error(`Error calculating distance for ${lokasi.nama}:`, error);
+                    console.error(`Error menghitung jarak untuk ${lokasi.nama}:`, error);
                     distancesCache.set(lokasi.id, Infinity);
                 }
             });
         }
 
-        // ====== FUNGSI URUTKAN PARKIR TERDEKAT ======
+        // ====== FUNGSI URUTKAN PARKIR TERDEKAT - DIPERBAIKI ======
         async function cariParkirTerdekat() {
             const btn = document.getElementById('btnCari');
-            const loading = document.getElementById('loading');
-            
-            if (!btn || !loading) return;
+            if (!btn) return;
             
             btn.disabled = true;
             btn.classList.add('active');
             
-            loading.querySelector('p').textContent = 'Mengurutkan lokasi...';
-            loading.style.display = 'flex';
-
             try {
                 await getLocation();
                 hitungSemuaJarak();
                 
-                const sortedParkir = [...dataParkir].sort((a, b) => {
+                dataParkir.sort((a, b) => {
                     const jarakA = distancesCache.get(a.id) || Infinity;
                     const jarakB = distancesCache.get(b.id) || Infinity;
                     return jarakA - jarakB;
                 });
-                
-                dataParkir.length = 0;
-                dataParkir.push(...sortedParkir);
-                
-                isSortedByDistance = true;
-                animationEnabled = false;
                 
                 renderLokasi();
                 highlightClosestParking();
                 
                 console.log('✅ Parkir berhasil diurutkan berdasarkan jarak');
                 
-                const timeoutId = setTimeout(() => {
-                    animationEnabled = true;
-                }, 100);
-                activeTimeouts.push(timeoutId);
-                
             } catch (error) {
                 console.error('Error mengurutkan parkir:', error);
                 
-                let errorMessage = 'Tidak dapat mengurutkan parkir. ';
+                // Tampilkan notifikasi GPS jika error karena izin ditolak
                 if (error.code === 1) {
-                    errorMessage = 'Izinkan akses lokasi untuk mengurutkan parkir terdekat.';
-                    showNotification();
-                } else if (error.message === 'Timeout' || error.code === 3) {
-                    errorMessage = 'Waktu habis. Coba lagi.';
-                } else if (error.message === 'Location request already in progress') {
-                    errorMessage = 'Sedang mencari lokasi...';
+                    // Cek apakah user sudah pernah menutup notifikasi
+                    const notificationDismissed = localStorage.getItem('gpsNotificationDismissed');
+                    if (!notificationDismissed) {
+                        showNotification();
+                    } else {
+                        alert('Izinkan akses lokasi untuk mengurutkan parkir terdekat.');
+                    }
+                } else if (error.message === 'Timeout') {
+                    alert('Waktu habis. Coba lagi.');
                 } else {
-                    errorMessage = 'Coba aktifkan GPS dan coba lagi.';
-                }
-                
-                const notification = document.getElementById('gpsNotification');
-                if (notification) {
-                    notification.querySelector('.notification-message').textContent = errorMessage;
-                    notification.classList.add('show');
+                    alert('Tidak dapat mengakses lokasi Anda.');
                 }
                 
             } finally {
-                if (btn) {
-                    const timeoutId = setTimeout(() => {
-                        btn.disabled = false;
-                        btn.classList.remove('active');
-                    }, 2000);
-                    activeTimeouts.push(timeoutId);
-                }
-                if (loading) {
-                    loading.style.display = 'none';
-                }
+                btn.disabled = false;
+                setTimeout(() => btn.classList.remove('active'), 2000);
             }
         }
 
@@ -1378,7 +1047,6 @@
             }
         }
 
-        // Render lokasi ke HTML
         function renderLokasi() {
             const container = document.getElementById('lokasiList');
             if (!container) return;
@@ -1387,22 +1055,18 @@
             
             dataParkir.forEach((lokasi, index) => {
                 const jarak = distancesCache.get(lokasi.id);
-                const jarakText = jarak !== undefined ? 
+                const jarakText = jarak ? 
                     `📏 ${formatJarak(jarak)} dari lokasi Anda` : 
                     '📏 Menghitung jarak...';
-                const jarakClass = jarak !== undefined ? '' : 'lokasi-jarak-loading';
-                
-                const nama = sanitizeText(lokasi.nama);
-                const alamat = sanitizeText(lokasi.alamat);
-                const koordinat = lokasi.koordinat;
+                const jarakClass = jarak ? '' : 'lokasi-jarak-loading';
                 
                 html += `
-                    <div class="lokasi-item" style="--item-index: ${index}; ${animationEnabled ? 'animation-name: slideUp;' : ''}">
+                    <div class="lokasi-item">
                         <div class="lokasi-header">
-                            <div class="lokasi-nama">${nama}</div>
+                            <div class="lokasi-nama">${lokasi.nama}</div>
                             <div class="lokasi-id">${index + 1}</div>
                         </div>
-                        <div class="lokasi-alamat">${alamat}</div>
+                        <div class="lokasi-alamat">${lokasi.alamat}</div>
                         <div class="lokasi-jarak ${jarakClass}">
                             ${jarakText}
                         </div>
@@ -1430,10 +1094,10 @@
                             ` : ''}
                         </div>
                         <div class="lokasi-actions">
-                            <button class="btn-action btn-map" onclick="bukaLokasiDiMaps('${koordinat}', '${nama}')">
+                            <button class="btn-action btn-map" onclick="bukaLokasiDiMaps('${lokasi.koordinat}', '${lokasi.nama}')">
                                 <span>🗺️</span> Lihat di Maps
                             </button>
-                            <button class="btn-action btn-route" onclick="ruteKeLokasi('${koordinat}', '${nama}')">
+                            <button class="btn-action btn-route" onclick="ruteKeLokasi('${lokasi.koordinat}', '${lokasi.nama}')">
                                 <span>📍</span> Rute ke Sini
                             </button>
                         </div>
@@ -1442,103 +1106,56 @@
             });
             
             container.innerHTML = html;
-            updateJarakDisplay();
         }
 
         // ====== FUNGSI MAPS ======
         function bukaLokasiDiMaps(koordinat, nama) {
-            try {
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                const [lat, lng] = safeParseCoordinates(koordinat);
-                const mapsUrl = isIOS ? 
-                    `maps://?q=${lat},${lng}&z=16` : 
-                    `https://maps.google.com/?q=${lat},${lng}`;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
+            if (isIOS) {
+                const appleMapsUrl = `maps://?q=${koordinat}&z=16`;
+                window.location.href = appleMapsUrl;
                 
-                const newWindow = window.open(mapsUrl, '_blank');
-                
-                if (isIOS && newWindow) {
-                    const fallbackTimeout = setTimeout(() => {
-                        try {
-                            if (!newWindow.closed && document.hasFocus()) {
-                                window.open(`https://maps.google.com/?q=${lat},${lng}`, '_blank');
-                            }
-                        } catch (e) {
-                            console.error('Fallback error:', e);
-                        }
-                    }, 1000);
-                    activeTimeouts.push(fallbackTimeout);
-                }
-                
-            } catch (error) {
-                console.error('Error opening maps:', error);
-                alert('Tidak dapat membuka peta. Koordinat tidak valid.');
+                setTimeout(() => {
+                    if (document.hasFocus()) {
+                        window.open(`https://maps.google.com/?q=${koordinat}`, '_blank');
+                    }
+                }, 500);
+            } else {
+                window.open(`https://maps.google.com/?q=${koordinat}`, '_blank');
             }
         }
 
         function ruteKeLokasi(koordinat, nama) {
-            const loading = document.getElementById('loading');
-            if (!loading) return;
-            
-            loading.querySelector('p').textContent = 'Mengarahkan ke Maps...';
-            loading.style.display = 'flex';
-            
-            const handleMapsRedirect = (userLat, userLng) => {
-                try {
-                    const [destLat, destLng] = safeParseCoordinates(koordinat);
-                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                    
-                    let mapsUrl;
-                    if (isIOS) {
-                        mapsUrl = `maps://?saddr=${userLat},${userLng}&daddr=${destLat},${destLng}&dirflg=d`;
-                    } else {
-                        mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destLat},${destLng}&travelmode=driving`;
-                    }
-                    
-                    const newWindow = window.open(mapsUrl, '_blank');
-                    
-                    if (isIOS && newWindow) {
-                        const fallbackTimeout = setTimeout(() => {
-                            try {
-                                if (!newWindow.closed && document.hasFocus()) {
-                                    const googleUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destLat},${destLng}&travelmode=driving`;
-                                    window.open(googleUrl, '_blank');
-                                }
-                            } catch (e) {
-                                console.error('Fallback error:', e);
-                            }
-                        }, 1500);
-                        activeTimeouts.push(fallbackTimeout);
-                    }
-                    
-                } catch (error) {
-                    console.error('Error creating route:', error);
-                    alert('Tidak dapat membuat rute. Koordinat tidak valid.');
-                }
-            };
-            
             if (navigator.geolocation) {
                 const options = {
                     enableHighAccuracy: true,
-                    timeout: 8000,
+                    timeout: 7000,
                     maximumAge: 0
                 };
                 
-                const timeoutId = setTimeout(() => {
-                    loading.style.display = 'none';
-                    bukaLokasiDiMaps(koordinat, nama);
-                }, 8000);
-                activeTimeouts.push(timeoutId);
-                
                 navigator.geolocation.getCurrentPosition(
                     (pos) => {
-                        clearTimeout(timeoutId);
-                        loading.style.display = 'none';
-                        handleMapsRedirect(pos.coords.latitude, pos.coords.longitude);
+                        const userLat = pos.coords.latitude;
+                        const userLng = pos.coords.longitude;
+                        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                        
+                        if (isIOS) {
+                            const appleRouteUrl = `maps://?saddr=${userLat},${userLng}&daddr=${koordinat}&dirflg=d`;
+                            window.location.href = appleRouteUrl;
+                            
+                            setTimeout(() => {
+                                if (document.hasFocus()) {
+                                    const googleRouteUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${koordinat}&travelmode=driving`;
+                                    window.open(googleRouteUrl, '_blank');
+                                }
+                            }, 500);
+                        } else {
+                            const googleRouteUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${koordinat}&travelmode=driving`;
+                            window.open(googleRouteUrl, '_blank');
+                        }
                     },
                     (err) => {
-                        clearTimeout(timeoutId);
-                        loading.style.display = 'none';
-                        
                         if (err.code === 1) {
                             if (confirm('Izinkan akses lokasi untuk rute terdekat?\n\nAtau buka lokasi di Maps saja?')) {
                                 bukaLokasiDiMaps(koordinat, nama);
@@ -1551,32 +1168,16 @@
                     options
                 );
             } else {
-                loading.style.display = 'none';
                 alert('Browser tidak mendukung navigasi lokasi.\nBuka lokasi di Maps saja.');
                 bukaLokasiDiMaps(koordinat, nama);
             }
         }
 
-        // Update tampilan jarak
-        function updateJarakDisplay() {
-            const jarakElements = document.querySelectorAll('.lokasi-jarak');
-            jarakElements.forEach((element, index) => {
-                const lokasi = dataParkir[index];
-                if (lokasi) {
-                    const jarak = distancesCache.get(lokasi.id);
-                    if (jarak !== undefined) {
-                        element.textContent = `📏 ${formatJarak(jarak)} dari lokasi Anda`;
-                        element.classList.remove('lokasi-jarak-loading');
-                    }
-                }
-            });
-        }
-
-        // ====== INISIALISASI DAN CLEANUP ======
-        function initApp() {
-            showNotification();
+        // ====== INISIALISASI ======
+        document.addEventListener('DOMContentLoaded', () => {
             renderLokasi();
             
+            // Coba dapatkan lokasi user saat pertama kali load
             getLocation()
                 .then(() => {
                     hitungSemuaJarak();
@@ -1585,52 +1186,21 @@
                 .catch(err => {
                     console.log('Lokasi tidak tersedia saat inisialisasi:', err.message);
                 });
-            
-            console.log('📍 Sistem Parkir Yogyakarta v2.3 - Soft Shadows');
-            console.log('🎨 Shadow kontras dikurangi untuk kenyamanan mata');
-            
-            const timeoutId = setTimeout(() => {
-                const loading = document.getElementById('loading');
-                if (loading) loading.style.display = 'none';
-            }, 1000);
-            activeTimeouts.push(timeoutId);
-        }
-
-        function cleanupApp() {
-            cleanupTimeouts();
-            
-            if (visibilityChangeHandler) {
-                document.removeEventListener('visibilitychange', visibilityChangeHandler);
-            }
-            
-            distancesCache.clear();
-            userPosition = null;
-            isGettingLocation = false;
-        }
-
-        // Handle page visibility
-        visibilityChangeHandler = () => {
-            if (!document.hidden) {
-                const loading = document.getElementById('loading');
-                if (loading) {
-                    const timeoutId = setTimeout(() => {
-                        loading.style.display = 'none';
-                    }, 300);
-                    activeTimeouts.push(timeoutId);
-                }
-            } else {
-                cleanupTimeouts();
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initApp();
-            document.addEventListener('visibilitychange', visibilityChangeHandler);
         });
 
-        // Handle page unload
-        window.addEventListener('beforeunload', cleanupApp);
-        window.addEventListener('pagehide', cleanupApp);
+        function updateJarakDisplay() {
+            const jarakElements = document.querySelectorAll('.lokasi-jarak');
+            jarakElements.forEach((element, index) => {
+                const lokasi = dataParkir[index];
+                if (lokasi) {
+                    const jarak = distancesCache.get(lokasi.id);
+                    if (jarak) {
+                        element.textContent = `📏 ${formatJarak(jarak)} dari lokasi Anda`;
+                        element.classList.remove('lokasi-jarak-loading');
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
