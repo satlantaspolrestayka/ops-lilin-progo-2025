@@ -905,22 +905,10 @@
             }
         }
         
-        /* Stagger animation untuk item lokasi */
-        .lokasi-item:nth-child(1) { animation-delay: 0.1s; }
-        .lokasi-item:nth-child(2) { animation-delay: 0.2s; }
-        .lokasi-item:nth-child(3) { animation-delay: 0.3s; }
-        .lokasi-item:nth-child(4) { animation-delay: 0.4s; }
-        .lokasi-item:nth-child(5) { animation-delay: 0.5s; }
-        .lokasi-item:nth-child(6) { animation-delay: 0.6s; }
-        .lokasi-item:nth-child(7) { animation-delay: 0.7s; }
-        .lokasi-item:nth-child(8) { animation-delay: 0.8s; }
-        .lokasi-item:nth-child(9) { animation-delay: 0.9s; }
-        .lokasi-item:nth-child(10) { animation-delay: 1.0s; }
-        .lokasi-item:nth-child(11) { animation-delay: 1.1s; }
-        .lokasi-item:nth-child(12) { animation-delay: 1.2s; }
-        .lokasi-item:nth-child(13) { animation-delay: 1.3s; }
-        .lokasi-item:nth-child(14) { animation-delay: 1.4s; }
-        .lokasi-item:nth-child(15) { animation-delay: 1.5s; }
+        /* Stagger animation untuk item lokasi - FIXED FOR DYNAMIC ITEMS */
+        .lokasi-item:nth-child(n) { 
+            animation-delay: calc(0.05s * var(--item-index, 0));
+        }
         
         /* Dark Mode */
         @media (prefers-color-scheme: dark) {
@@ -1186,23 +1174,49 @@
             {id:15, nama:"STADION KRIDOSONO", alamat:"JL YOS SUDARSO", bus:0, mobil:0, motor:0, koordinat:"-7.7877683,110.3736898"}
         ];
 
-        // Global variables
+        // Global variables - FIXED VERSION
         let userPosition = null;
-        let originalOrder = [...dataParkir];
         const distancesCache = new Map();
         let isSortedByDistance = false;
         let animationEnabled = true;
+        let isGettingLocation = false; // Prevent race condition
+        let activeTimeouts = []; // Track timeouts for cleanup
+        let visibilityChangeHandler = null; // Track event listener
+
+        // ====== UTILITY FUNCTIONS ======
+        function cleanupTimeouts() {
+            activeTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+            activeTimeouts = [];
+        }
+
+        function safeParseCoordinates(coordString) {
+            try {
+                const [lat, lng] = coordString.split(',').map(Number);
+                if (isNaN(lat) || isNaN(lng)) {
+                    throw new Error('Invalid coordinates');
+                }
+                return [lat, lng];
+            } catch (error) {
+                console.error('Error parsing coordinates:', coordString, error);
+                return [0, 0]; // Fallback
+            }
+        }
+
+        function sanitizeText(text) {
+            return String(text).replace(/[<>]/g, '');
+        }
 
         // ====== FUNGSI NOTIFIKASI GPS ======
         function showNotification() {
             const notificationSeen = localStorage.getItem('gpsNotificationSeen');
             if (!notificationSeen) {
-                setTimeout(() => {
+                const timeoutId = setTimeout(() => {
                     const notification = document.getElementById('gpsNotification');
                     if (notification) {
                         notification.classList.add('show');
                     }
                 }, 800);
+                activeTimeouts.push(timeoutId);
             }
         }
 
@@ -1235,22 +1249,37 @@
             }
         }
 
-        function getLocation() {
+        function getLocation(maxRetries = 2) {
             return new Promise((resolve, reject) => {
                 if (userPosition) {
                     resolve(userPosition);
                     return;
                 }
-
-                if (navigator.geolocation) {
+                
+                if (isGettingLocation) {
+                    reject(new Error('Location request already in progress'));
+                    return;
+                }
+                
+                isGettingLocation = true;
+                let retries = 0;
+                
+                const attemptGetLocation = () => {
+                    if (!navigator.geolocation) {
+                        isGettingLocation = false;
+                        reject(new Error('Geolocation not supported'));
+                        return;
+                    }
+                    
                     const options = {
                         enableHighAccuracy: true,
-                        timeout: 10000,
+                        timeout: 8000, // Consistent timeout
                         maximumAge: 0
                     };
-
+                    
                     navigator.geolocation.getCurrentPosition(
                         (pos) => {
+                            isGettingLocation = false;
                             userPosition = {
                                 lat: pos.coords.latitude,
                                 lng: pos.coords.longitude
@@ -1258,28 +1287,41 @@
                             resolve(userPosition);
                         },
                         (err) => {
-                            reject(err);
+                            retries++;
+                            if (retries < maxRetries) {
+                                setTimeout(attemptGetLocation, 1000);
+                            } else {
+                                isGettingLocation = false;
+                                reject(err);
+                            }
                         },
                         options
                     );
-                } else {
-                    reject(new Error('Geolocation not supported'));
-                }
+                };
+                
+                attemptGetLocation();
             });
         }
 
         function hitungSemuaJarak() {
             if (!userPosition) return;
-
+            
+            distancesCache.clear(); // Clear cache before calculating
+            
             dataParkir.forEach(lokasi => {
-                const [lokasiLat, lokasiLng] = lokasi.koordinat.split(',').map(Number);
-                const jarak = hitungJarak(
-                    userPosition.lat,
-                    userPosition.lng,
-                    lokasiLat,
-                    lokasiLng
-                );
-                distancesCache.set(lokasi.id, jarak);
+                try {
+                    const [lokasiLat, lokasiLng] = safeParseCoordinates(lokasi.koordinat);
+                    const jarak = hitungJarak(
+                        userPosition.lat,
+                        userPosition.lng,
+                        lokasiLat,
+                        lokasiLng
+                    );
+                    distancesCache.set(lokasi.id, jarak);
+                } catch (error) {
+                    console.error(`Error calculating distance for ${lokasi.nama}:`, error);
+                    distancesCache.set(lokasi.id, Infinity);
+                }
             });
         }
 
@@ -1288,15 +1330,14 @@
             const btn = document.getElementById('btnCari');
             const loading = document.getElementById('loading');
             
-            if (btn) {
-                btn.disabled = true;
-                btn.classList.add('active');
-            }
+            if (!btn || !loading) return;
             
-            if (loading) {
-                loading.querySelector('p').textContent = 'Mengurutkan lokasi...';
-                loading.style.display = 'flex';
-            }
+            // Debounce: disable button temporarily
+            btn.disabled = true;
+            btn.classList.add('active');
+            
+            loading.querySelector('p').textContent = 'Mengurutkan lokasi...';
+            loading.style.display = 'flex';
 
             try {
                 // Dapatkan lokasi user
@@ -1305,12 +1346,16 @@
                 // Hitung semua jarak
                 hitungSemuaJarak();
                 
-                // Urutkan dataParkir berdasarkan jarak terdekat
-                dataParkir.sort((a, b) => {
+                // Buat copy untuk sorting
+                const sortedParkir = [...dataParkir].sort((a, b) => {
                     const jarakA = distancesCache.get(a.id) || Infinity;
                     const jarakB = distancesCache.get(b.id) || Infinity;
                     return jarakA - jarakB;
                 });
+                
+                // Update dataParkir dengan urutan baru
+                dataParkir.length = 0;
+                dataParkir.push(...sortedParkir);
                 
                 isSortedByDistance = true;
                 
@@ -1326,9 +1371,10 @@
                 console.log('✅ Parkir berhasil diurutkan berdasarkan jarak');
                 
                 // Kembalikan animasi setelah 100ms
-                setTimeout(() => {
+                const timeoutId = setTimeout(() => {
                     animationEnabled = true;
                 }, 100);
+                activeTimeouts.push(timeoutId);
                 
             } catch (error) {
                 console.error('Error mengurutkan parkir:', error);
@@ -1338,20 +1384,33 @@
                     errorMessage = 'Izinkan akses lokasi untuk mengurutkan parkir terdekat.';
                     // Tampilkan notifikasi lagi
                     showNotification();
-                } else if (error.message === 'Timeout') {
+                } else if (error.message === 'Timeout' || error.code === 3) {
                     errorMessage = 'Waktu habis. Coba lagi.';
+                } else if (error.message === 'Location request already in progress') {
+                    errorMessage = 'Sedang mencari lokasi...';
                 } else {
                     errorMessage = 'Coba aktifkan GPS dan coba lagi.';
                 }
                 
-                alert(errorMessage);
+                // Show user-friendly error
+                const notification = document.getElementById('gpsNotification');
+                if (notification) {
+                    notification.querySelector('.notification-message').textContent = errorMessage;
+                    notification.classList.add('show');
+                }
                 
             } finally {
                 if (btn) {
-                    btn.disabled = false;
-                    setTimeout(() => btn.classList.remove('active'), 2000);
+                    // Re-enable button after delay
+                    const timeoutId = setTimeout(() => {
+                        btn.disabled = false;
+                        btn.classList.remove('active');
+                    }, 2000);
+                    activeTimeouts.push(timeoutId);
                 }
-                if (loading) loading.style.display = 'none';
+                if (loading) {
+                    loading.style.display = 'none';
+                }
             }
         }
 
@@ -1373,25 +1432,27 @@
             const container = document.getElementById('lokasiList');
             if (!container) return;
             
-            // Sementara nonaktifkan animasi jika sedang sorting
-            const animationClass = animationEnabled ? 'slideUp' : '';
-            
             let html = '';
             
             dataParkir.forEach((lokasi, index) => {
                 const jarak = distancesCache.get(lokasi.id);
-                const jarakText = jarak ? 
+                const jarakText = jarak !== undefined ? 
                     `📏 ${formatJarak(jarak)} dari lokasi Anda` : 
                     '📏 Menghitung jarak...';
-                const jarakClass = jarak ? '' : 'lokasi-jarak-loading';
+                const jarakClass = jarak !== undefined ? '' : 'lokasi-jarak-loading';
+                
+                // Sanitize data
+                const nama = sanitizeText(lokasi.nama);
+                const alamat = sanitizeText(lokasi.alamat);
+                const koordinat = lokasi.koordinat;
                 
                 html += `
-                    <div class="lokasi-item" style="animation-name: ${animationClass}">
+                    <div class="lokasi-item" style="--item-index: ${index}; ${animationEnabled ? 'animation-name: slideUp;' : ''}">
                         <div class="lokasi-header">
-                            <div class="lokasi-nama">${lokasi.nama}</div>
+                            <div class="lokasi-nama">${nama}</div>
                             <div class="lokasi-id">${index + 1}</div>
                         </div>
-                        <div class="lokasi-alamat">${lokasi.alamat}</div>
+                        <div class="lokasi-alamat">${alamat}</div>
                         <div class="lokasi-jarak ${jarakClass}">
                             ${jarakText}
                         </div>
@@ -1419,10 +1480,10 @@
                             ` : ''}
                         </div>
                         <div class="lokasi-actions">
-                            <button class="btn-action btn-map" onclick="bukaLokasiDiMaps('${lokasi.koordinat}', '${lokasi.nama}')">
+                            <button class="btn-action btn-map" onclick="bukaLokasiDiMaps('${koordinat}', '${nama}')">
                                 <span>🗺️</span> Lihat di Maps
                             </button>
-                            <button class="btn-action btn-route" onclick="ruteKeLokasi('${lokasi.koordinat}', '${lokasi.nama}')">
+                            <button class="btn-action btn-route" onclick="ruteKeLokasi('${koordinat}', '${nama}')">
                                 <span>📍</span> Rute ke Sini
                             </button>
                         </div>
@@ -1436,21 +1497,33 @@
             updateJarakDisplay();
         }
 
-        // ====== FUNGSI LAIN (TETAP SAMA) ======
+        // ====== FUNGSI MAPS ======
         function bukaLokasiDiMaps(koordinat, nama) {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            
-            if (isIOS) {
-                const appleMapsUrl = `maps://?q=${koordinat}&z=16`;
-                window.location.href = appleMapsUrl;
+            try {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const [lat, lng] = safeParseCoordinates(koordinat);
+                const mapsUrl = isIOS ? 
+                    `maps://?q=${lat},${lng}&z=16` : 
+                    `https://maps.google.com/?q=${lat},${lng}`;
                 
-                setTimeout(() => {
-                    if (document.hasFocus()) {
-                        window.open(`https://maps.google.com/?q=${koordinat}`, '_blank');
-                    }
-                }, 500);
-            } else {
-                window.open(`https://maps.google.com/?q=${koordinat}`, '_blank');
+                const newWindow = window.open(mapsUrl, '_blank');
+                
+                if (isIOS && newWindow) {
+                    const fallbackTimeout = setTimeout(() => {
+                        try {
+                            if (!newWindow.closed && document.hasFocus()) {
+                                window.open(`https://maps.google.com/?q=${lat},${lng}`, '_blank');
+                            }
+                        } catch (e) {
+                            console.error('Fallback error:', e);
+                        }
+                    }, 1000);
+                    activeTimeouts.push(fallbackTimeout);
+                }
+                
+            } catch (error) {
+                console.error('Error opening maps:', error);
+                alert('Tidak dapat membuka peta. Koordinat tidak valid.');
             }
         }
 
@@ -1461,41 +1534,58 @@
             loading.querySelector('p').textContent = 'Mengarahkan ke Maps...';
             loading.style.display = 'flex';
             
+            const handleMapsRedirect = (userLat, userLng) => {
+                try {
+                    const [destLat, destLng] = safeParseCoordinates(koordinat);
+                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                    
+                    let mapsUrl;
+                    if (isIOS) {
+                        mapsUrl = `maps://?saddr=${userLat},${userLng}&daddr=${destLat},${destLng}&dirflg=d`;
+                    } else {
+                        mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destLat},${destLng}&travelmode=driving`;
+                    }
+                    
+                    const newWindow = window.open(mapsUrl, '_blank');
+                    
+                    if (isIOS && newWindow) {
+                        const fallbackTimeout = setTimeout(() => {
+                            try {
+                                if (!newWindow.closed && document.hasFocus()) {
+                                    const googleUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destLat},${destLng}&travelmode=driving`;
+                                    window.open(googleUrl, '_blank');
+                                }
+                            } catch (e) {
+                                console.error('Fallback error:', e);
+                            }
+                        }, 1500);
+                        activeTimeouts.push(fallbackTimeout);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error creating route:', error);
+                    alert('Tidak dapat membuat rute. Koordinat tidak valid.');
+                }
+            };
+            
             if (navigator.geolocation) {
                 const options = {
                     enableHighAccuracy: true,
-                    timeout: 7000,
+                    timeout: 8000,
                     maximumAge: 0
                 };
                 
                 const timeoutId = setTimeout(() => {
                     loading.style.display = 'none';
                     bukaLokasiDiMaps(koordinat, nama);
-                }, 5000);
+                }, 8000);
+                activeTimeouts.push(timeoutId);
                 
                 navigator.geolocation.getCurrentPosition(
                     (pos) => {
                         clearTimeout(timeoutId);
                         loading.style.display = 'none';
-                        
-                        const userLat = pos.coords.latitude;
-                        const userLng = pos.coords.longitude;
-                        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                        
-                        if (isIOS) {
-                            const appleRouteUrl = `maps://?saddr=${userLat},${userLng}&daddr=${koordinat}&dirflg=d`;
-                            window.location.href = appleRouteUrl;
-                            
-                            setTimeout(() => {
-                                if (document.hasFocus()) {
-                                    const googleRouteUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${koordinat}&travelmode=driving`;
-                                    window.open(googleRouteUrl, '_blank');
-                                }
-                            }, 500);
-                        } else {
-                            const googleRouteUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${koordinat}&travelmode=driving`;
-                            window.open(googleRouteUrl, '_blank');
-                        }
+                        handleMapsRedirect(pos.coords.latitude, pos.coords.longitude);
                     },
                     (err) => {
                         clearTimeout(timeoutId);
@@ -1519,8 +1609,23 @@
             }
         }
 
-        // ====== INISIALISASI ======
-        document.addEventListener('DOMContentLoaded', () => {
+        // Update tampilan jarak
+        function updateJarakDisplay() {
+            const jarakElements = document.querySelectorAll('.lokasi-jarak');
+            jarakElements.forEach((element, index) => {
+                const lokasi = dataParkir[index];
+                if (lokasi) {
+                    const jarak = distancesCache.get(lokasi.id);
+                    if (jarak !== undefined) {
+                        element.textContent = `📏 ${formatJarak(jarak)} dari lokasi Anda`;
+                        element.classList.remove('lokasi-jarak-loading');
+                    }
+                }
+            });
+        }
+
+        // ====== INISIALISASI DAN CLEANUP ======
+        function initApp() {
             // Tampilkan notifikasi GPS
             showNotification();
             
@@ -1538,43 +1643,57 @@
                 });
             
             // Log info
-            console.log('📍 Sistem Parkir Yogyakarta v2.0');
+            console.log('📍 Sistem Parkir Yogyakarta v2.1 - Fixed');
             console.log('🚗 Total lokasi:', dataParkir.length);
-            console.log('🎨 Visual enhancements: Active');
+            console.log('🐛 Bug fixes applied');
             
             // Sembunyikan loading
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
                 const loading = document.getElementById('loading');
                 if (loading) loading.style.display = 'none';
             }, 1000);
-        });
+            activeTimeouts.push(timeoutId);
+        }
 
-        // Update tampilan jarak
-        function updateJarakDisplay() {
-            const jarakElements = document.querySelectorAll('.lokasi-jarak');
-            jarakElements.forEach((element, index) => {
-                const lokasi = dataParkir[index];
-                if (lokasi) {
-                    const jarak = distancesCache.get(lokasi.id);
-                    if (jarak) {
-                        element.textContent = `📏 ${formatJarak(jarak)} dari lokasi Anda`;
-                        element.classList.remove('lokasi-jarak-loading');
-                    }
-                }
-            });
+        function cleanupApp() {
+            // Cleanup timeouts
+            cleanupTimeouts();
+            
+            // Remove event listeners
+            if (visibilityChangeHandler) {
+                document.removeEventListener('visibilitychange', visibilityChangeHandler);
+            }
+            
+            // Clear caches
+            distancesCache.clear();
+            userPosition = null;
+            isGettingLocation = false;
         }
 
         // Handle page visibility
-        document.addEventListener('visibilitychange', () => {
+        visibilityChangeHandler = () => {
             if (!document.hidden) {
                 const loading = document.getElementById('loading');
                 if (loading) {
-                    setTimeout(() => {
+                    const timeoutId = setTimeout(() => {
                         loading.style.display = 'none';
                     }, 300);
+                    activeTimeouts.push(timeoutId);
                 }
+            } else {
+                // Page hidden, do cleanup if needed
+                cleanupTimeouts();
             }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp();
+            document.addEventListener('visibilitychange', visibilityChangeHandler);
         });
+
+        // Handle page unload
+        window.addEventListener('beforeunload', cleanupApp);
+        window.addEventListener('pagehide', cleanupApp);
     </script>
 </body>
-    </html>
+</html>
