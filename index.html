@@ -59,15 +59,13 @@
             line-height: 1.5;
         }
         
-        /* ====== HEADER UTAMA - DIPERBAIKI ====== */
+        /* ====== HEADER UTAMA ====== */
         .main-header { 
             background: linear-gradient(135deg, #1E3A8A, var(--primary-700)); 
             color: white; 
             text-align: center;
             border-bottom: 3px solid rgba(255, 215, 0, 0.5);
-            
-            /* Padding untuk semua device */
-            padding: 40px 60px; /* Default untuk desktop */
+            padding: 40px 60px;
         }
         
         .header-content {
@@ -104,9 +102,54 @@
             letter-spacing: 0.5px;
         }
         
-        /* ====== RESPONSIVE HEADER ====== */
+        /* ====== LOADING OVERLAY ====== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
         
-        /* Tablet (768px - 1024px) */
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-spinner {
+            border: 4px solid var(--gray-200);
+            border-top: 4px solid var(--primary-500);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+        
+        .loading-subtext {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ====== RESPONSIVE HEADER ====== */
         @media (max-width: 1024px) {
             .main-header {
                 padding: 35px 40px;
@@ -121,7 +164,6 @@
             }
         }
         
-        /* Mobile (425px - 767px) */
         @media (max-width: 767px) {
             .main-header {
                 padding: 30px 30px;
@@ -141,7 +183,6 @@
             }
         }
         
-        /* Small Mobile (< 425px) */
         @media (max-width: 424px) {
             body {
                 padding: 15px;
@@ -628,8 +669,15 @@
     </style>
 </head>
 <body>
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Mendeteksi lokasi Anda...</div>
+        <div class="loading-subtext">Harap tunggu sebentar</div>
+    </div>
+
     <div class="container">
-        <!-- HEADER UTAMA - TANPA ICON, LEBIH LEBAR -->
+        <!-- HEADER UTAMA -->
         <div class="main-header">
             <div class="header-content">
                 <h1>OPERASI LILIN PROGO 2025</h1>
@@ -718,6 +766,7 @@
 
         let userPosition = null;
         const distancesCache = new Map();
+        let isCalculating = false;
 
         // ====== FUNGSI UTAMA ======
         function hitungJarak(lat1, lon1, lat2, lon2) {
@@ -740,10 +789,16 @@
             }
         }
 
+        // Fungsi untuk mendapatkan lokasi user
         function getLocation() {
             return new Promise((resolve, reject) => {
                 if (userPosition) {
                     resolve(userPosition);
+                    return;
+                }
+                
+                if (isCalculating) {
+                    reject(new Error('Sedang menghitung lokasi...'));
                     return;
                 }
                 
@@ -752,40 +807,106 @@
                     return;
                 }
                 
+                // Tampilkan loading
+                showLoading('Mendeteksi lokasi Anda...');
+                
                 navigator.geolocation.getCurrentPosition(
                     (pos) => {
                         userPosition = {
                             lat: pos.coords.latitude,
                             lng: pos.coords.longitude
                         };
+                        hideLoading();
                         resolve(userPosition);
                     },
                     (err) => {
+                        hideLoading();
                         reject(err);
                     },
                     {
                         enableHighAccuracy: true,
-                        timeout: 10000,
+                        timeout: 8000, // Timeout lebih pendek
                         maximumAge: 0
                     }
                 );
             });
         }
 
-        function hitungSemuaJarak() {
+        // Fungsi untuk menghitung semua jarak
+        async function hitungSemuaJarak() {
             if (!userPosition) return;
+            
+            // Tampilkan loading untuk perhitungan jarak
+            showLoading('Menghitung jarak ke lokasi parkir...');
             
             distancesCache.clear();
             
-            dataParkir.forEach(lokasi => {
-                const [lokasiLat, lokasiLng] = lokasi.koordinat.split(',').map(Number);
-                const jarak = hitungJarak(
-                    userPosition.lat,
-                    userPosition.lng,
-                    lokasiLat,
-                    lokasiLng
-                );
-                distancesCache.set(lokasi.id, jarak);
+            // Hitung jarak untuk semua lokasi
+            for (const lokasi of dataParkir) {
+                try {
+                    const [lokasiLat, lokasiLng] = lokasi.koordinat.split(',').map(Number);
+                    const jarak = hitungJarak(
+                        userPosition.lat,
+                        userPosition.lng,
+                        lokasiLat,
+                        lokasiLng
+                    );
+                    distancesCache.set(lokasi.id, jarak);
+                    
+                    // Update UI secara bertahap
+                    updateJarakDisplay(lokasi.id, jarak);
+                    
+                    // Beri sedikit delay agar tidak terlalu cepat
+                    await delay(50);
+                } catch (error) {
+                    console.error(`Error menghitung jarak untuk ${lokasi.nama}:`, error);
+                    distancesCache.set(lokasi.id, Infinity);
+                }
+            }
+            
+            hideLoading();
+        }
+
+        // Helper function untuk delay
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Fungsi loading
+        function showLoading(message) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                const text = overlay.querySelector('.loading-text');
+                if (text && message) {
+                    text.textContent = message;
+                }
+                overlay.classList.add('active');
+            }
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+            }
+        }
+
+        // Update tampilan jarak untuk lokasi tertentu
+        function updateJarakDisplay(lokasiId, jarak) {
+            const jarakElements = document.querySelectorAll('.lokasi-jarak');
+            jarakElements.forEach((element) => {
+                const lokasiElement = element.closest('.lokasi-item');
+                if (lokasiElement) {
+                    const lokasiNama = lokasiElement.querySelector('.lokasi-nama');
+                    if (lokasiNama) {
+                        // Cari lokasi berdasarkan nama
+                        const lokasi = dataParkir.find(l => l.nama === lokasiNama.textContent);
+                        if (lokasi && lokasi.id === lokasiId) {
+                            element.textContent = `📏 ${formatJarak(jarak)} dari lokasi Anda`;
+                            element.classList.remove('lokasi-jarak-loading');
+                        }
+                    }
+                }
             });
         }
 
@@ -797,15 +918,24 @@
             btn.disabled = true;
             
             try {
-                await getLocation();
-                hitungSemuaJarak();
+                // Jika belum ada lokasi user, dapatkan dulu
+                if (!userPosition) {
+                    await getLocation();
+                }
                 
+                // Jika jarak belum dihitung, hitung dulu
+                if (distancesCache.size === 0) {
+                    await hitungSemuaJarak();
+                }
+                
+                // Urutkan data berdasarkan jarak
                 dataParkir.sort((a, b) => {
                     const jarakA = distancesCache.get(a.id) || Infinity;
                     const jarakB = distancesCache.get(b.id) || Infinity;
                     return jarakA - jarakB;
                 });
                 
+                // Render ulang dengan urutan baru
                 renderLokasi();
                 
                 console.log('✅ Parkir berhasil diurutkan berdasarkan jarak');
@@ -815,6 +945,8 @@
                 
                 if (error.code === 1) {
                     alert('Izinkan akses lokasi untuk mengurutkan parkir terdekat.');
+                } else if (error.message === 'Timeout') {
+                    alert('Waktu habis. Pastikan GPS aktif dan coba lagi.');
                 } else {
                     alert('Tidak dapat mengakses lokasi Anda.');
                 }
@@ -824,6 +956,7 @@
             }
         }
 
+        // Render lokasi ke HTML
         function renderLokasi() {
             const container = document.getElementById('lokasiList');
             if (!container) return;
@@ -834,7 +967,7 @@
                 const jarak = distancesCache.get(lokasi.id);
                 const jarakText = jarak ? 
                     `📏 ${formatJarak(jarak)} dari lokasi Anda` : 
-                    '📏 Menghitung jarak...';
+                    '📏 Mendeteksi lokasi...';
                 const jarakClass = jarak ? '' : 'lokasi-jarak-loading';
                 
                 html += `
@@ -932,8 +1065,21 @@
         }
 
         // ====== INISIALISASI ======
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Render lokasi pertama kali tanpa jarak
             renderLokasi();
+            
+            // Coba dapatkan lokasi user secara otomatis saat halaman load
+            try {
+                await getLocation();
+                
+                // Setelah dapat lokasi, hitung jarak ke semua parkir
+                await hitungSemuaJarak();
+                
+            } catch (error) {
+                console.log('Lokasi tidak tersedia:', error.message);
+                // Tetap tampilkan lokasi tanpa jarak
+            }
         });
     </script>
 </body>
